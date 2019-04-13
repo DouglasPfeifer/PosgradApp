@@ -19,19 +19,19 @@ struct Mission {
     init(description: String?, name: String?, order: Int?, season: DocumentReference?, ID: String?) {
         
         if let newDescription = description {
-            self.description = description
+            self.description = newDescription
         }
         if let newName = name {
-            self.name = name
+            self.name = newName
         }
         if let newOrder = order {
-            self.order = order
+            self.order = newOrder
         }
         if let newSeason = season {
-            self.season = season
+            self.season = newSeason
         }
         if let newID = ID {
-            self.ID = ID
+            self.ID = newID
         }
     }
 }

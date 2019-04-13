@@ -26,8 +26,6 @@ class DashboardLoadingChartTableViewCell: UITableViewCell {
         loadingLabel.translatesAutoresizingMaskIntoConstraints = false
         loadingLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         loadingLabel.topAnchor.constraint(equalTo: activityIndicator.bottomAnchor, constant: 8).isActive = true
-        //loadingLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16).isActive = true
-        //loadingLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 16).isActive = true
         loadingLabel.text = "Carregando..."
         loadingLabel.textAlignment = .center
         loadingLabel.textColor = UIColor.lightGray

@@ -38,7 +38,9 @@ class Chart: NSObject {
     
     var lineChartShouldBeActive = true
     
-    func initLineChartView(chartBackgroundColor: UIColor, chartLineColor: UIColor, chartCircleColor: UIColor, chartCircleHoleColor: UIColor, topGradientHexColor: String, bottomGradientHexColor: String, axisTextColor: UIColor, leftAxisFont: UIFont, xAxisFont: UIFont, chartBarColor: UIColor, chartBorderColor: UIColor, chartValueColor: UIColor, sliderY: [String: Double]) -> LineChartView {
+    var activeChart = BarLineChartViewBase()
+    
+    func initLineChartView(chartBackgroundColor: UIColor, chartLineColor: UIColor, chartCircleColor: UIColor, chartCircleHoleColor: UIColor, topGradientHexColor: String, bottomGradientHexColor: String, axisTextColor: UIColor, leftAxisFont: UIFont, xAxisFont: UIFont, chartBarColor: UIColor, chartBorderColor: UIColor, chartValueColor: UIColor, sliderY: [String: Double]) {
         
         self.chartBackgroundColor = chartBackgroundColor
         self.chartLineColor = chartLineColor
@@ -61,21 +63,19 @@ class Chart: NSObject {
         lineChartView.highlightPerDragEnabled = false
         lineChartView.chartDescription?.enabled = false
         lineChartView.legend.enabled = false
+        
         lineChartView.rightAxis.enabled = true
         lineChartView.rightAxis.axisMinimum = 0
-        //lineChartView.rightAxis.gridLineDashLengths = [0, 0]
         lineChartView.rightAxis.drawAxisLineEnabled = false
         lineChartView.rightAxis.drawGridLinesEnabled = false
         lineChartView.rightAxis.labelTextColor = UIColor.clear
         
         lineChartView.leftAxis.enabled = true
         lineChartView.leftAxis.axisMinimum = 0
-        //lineChartView.leftAxis.gridLineDashLengths = [0, 0]
         lineChartView.leftAxis.drawAxisLineEnabled = false
         lineChartView.leftAxis.gridColor = UIColor.lightGray
-        lineChartView.leftAxis.labelTextColor = axisTextColor
-        lineChartView.leftAxis.labelFont = leftAxisFont
         lineChartView.leftAxis.drawLimitLinesBehindDataEnabled = false
+        lineChartView.leftAxis.labelTextColor = UIColor.clear
         
         lineChartView.xAxis.enabled = true
         lineChartView.xAxis.granularity = 1
@@ -88,16 +88,6 @@ class Chart: NSObject {
         
         lineChartView.backgroundColor = chartBackgroundColor
         
-        /*
-        let marker = BalloonMarker(color: UIColor(white: 180/255, alpha: 1),
-                                   font: .systemFont(ofSize: 12),
-                                   textColor: .white,
-                                   insets: UIEdgeInsets(top: 8, left: 8, bottom: 20, right: 8))
-        marker.chartView = lineChartView
-        marker.minimumSize = CGSize(width: 80, height: 40)
-        lineChartView.marker = marker
-        */
-        
         var maxY = 0.0
         let values = (0..<sliderX).map { (i) -> ChartDataEntry in
             if maxY < sliderY[DefaultMissions.order[i]]! {
@@ -109,7 +99,6 @@ class Chart: NSObject {
         
         let set1 = LineChartDataSet(values: values, label: "")
         set1.drawIconsEnabled = false
-        //set1.lineDashLengths = [0, 0]
         set1.setColor(chartLineColor)
         set1.setCircleColor(chartCircleColor)
         set1.lineWidth = 1
@@ -126,7 +115,7 @@ class Chart: NSObject {
         let gradient = CGGradient(colorsSpace: nil, colors: gradientColors as CFArray, locations: nil)!
         
         set1.fillAlpha = 0.5
-        set1.fill = Fill(linearGradient: gradient, angle: 90) //.linearGradient(gradient, angle: 90)
+        set1.fill = Fill(linearGradient: gradient, angle: 90)
         
         let data = LineChartData(dataSet: set1)
         
@@ -143,25 +132,25 @@ class Chart: NSObject {
             set.mode = (set.mode == .cubicBezier) ? .linear : .cubicBezier
         }
         
-        return lineChartView
+        lineChartShouldBeActive = true
+        activeChart = lineChartView
     }
     
-    func initBarChartView(chartBackgroundColor: UIColor, chartBarColor: UIColor, chartBorderColor: UIColor, axisTextColor: UIColor, leftAxisFont: UIFont, xAxisFont: UIFont, chartValueColor: UIColor, sliderY: [String: Double]) -> BarChartView {
+    func initBarChartView(chartBackgroundColor: UIColor, chartBarColor: UIColor, chartBorderColor: UIColor, axisTextColor: UIColor, leftAxisFont: UIFont, xAxisFont: UIFont, chartValueColor: UIColor, sliderY: [String: Double]) {
         
         let barChartView = BarChartView()
         barChartView.highlightPerDragEnabled = false
         barChartView.chartDescription?.enabled = false
         barChartView.legend.enabled = false
+        
         barChartView.rightAxis.enabled = true
         barChartView.rightAxis.axisMinimum = 0
-        //barChartView.rightAxis.gridLineDashLengths = [0, 0]
         barChartView.rightAxis.drawAxisLineEnabled = false
         barChartView.rightAxis.drawGridLinesEnabled = false
         barChartView.rightAxis.labelTextColor = UIColor.clear
         
         barChartView.leftAxis.enabled = true
         barChartView.leftAxis.axisMinimum = 0
-        //barChartView.leftAxis.gridLineDashLengths = [0, 0]
         barChartView.leftAxis.drawAxisLineEnabled = false
         barChartView.leftAxis.gridColor = UIColor.lightGray
         barChartView.leftAxis.labelTextColor = axisTextColor
@@ -179,16 +168,6 @@ class Chart: NSObject {
         
         barChartView.backgroundColor = chartBackgroundColor
         
-        /*
-        let marker = BalloonMarker(color: UIColor(white: 180/255, alpha: 1),
-                                   font: .systemFont(ofSize: 12),
-                                   textColor: .white,
-                                   insets: UIEdgeInsets(top: 8, left: 8, bottom: 20, right: 8))
-        marker.chartView = barChartView
-        marker.minimumSize = CGSize(width: 80, height: 40)
-        barChartView.marker = marker
-        */
-        
         var maxY = 0.0
         let yVals = (0..<sliderX).map { (i) -> BarChartDataEntry in
             if maxY < sliderY[DefaultMissions.order[i]]! {
@@ -200,7 +179,6 @@ class Chart: NSObject {
         
         var set1: BarChartDataSet! = nil
         set1 = BarChartDataSet(values: yVals, label: "")
-        //        set1.colors = ChartColorTemplates.material()
         set1.drawValuesEnabled = false
         
         let data = BarChartData(dataSet: set1)
@@ -219,20 +197,49 @@ class Chart: NSObject {
                 set.drawValuesEnabled = true
             }
         }
-                
-        return barChartView
+        
+        lineChartShouldBeActive = false
+        activeChart = barChartView
     }
     
-    func changeToLineChart () -> LineChartView {
-        
-        let lineChartView = initLineChartView(chartBackgroundColor: chartBackgroundColor, chartLineColor: chartLineColor, chartCircleColor: chartCircleColor, chartCircleHoleColor: chartCircleHoleColor, topGradientHexColor: topGradientHexColor, bottomGradientHexColor: bottomGradientHexColor, axisTextColor: axisTextColor, leftAxisFont: leftAxisFont, xAxisFont: xAxisFont, chartBarColor: chartBarColor, chartBorderColor: chartBorderColor, chartValueColor: chartValueColor, sliderY: sliderY)
-        
-        return lineChartView
+    func changeToLineChart () {
+        initLineChartView(chartBackgroundColor: chartBackgroundColor, chartLineColor: chartLineColor, chartCircleColor: chartCircleColor, chartCircleHoleColor: chartCircleHoleColor, topGradientHexColor: topGradientHexColor, bottomGradientHexColor: bottomGradientHexColor, axisTextColor: axisTextColor, leftAxisFont: leftAxisFont, xAxisFont: xAxisFont, chartBarColor: chartBarColor, chartBorderColor: chartBorderColor, chartValueColor: chartValueColor, sliderY: sliderY)
     }
     
-    func changeToBarChart () -> BarChartView {
-        let barChartView = initBarChartView(chartBackgroundColor: chartBackgroundColor, chartBarColor: chartBarColor, chartBorderColor: chartBorderColor, axisTextColor: axisTextColor, leftAxisFont: leftAxisFont, xAxisFont: xAxisFont, chartValueColor: chartValueColor, sliderY: sliderY)
-        return barChartView
+    func changeToBarChart () {
+        initBarChartView(chartBackgroundColor: chartBackgroundColor, chartBarColor: chartBarColor, chartBorderColor: chartBorderColor, axisTextColor: axisTextColor, leftAxisFont: leftAxisFont, xAxisFont: xAxisFont, chartValueColor: chartValueColor, sliderY: sliderY)
+    }
+    
+    func initUserTeamChart (sliderY: [String: Double]) {
+        initLineChartView(chartBackgroundColor: UIColor.darkGray,
+                          chartLineColor: UIColor.white,
+                          chartCircleColor: UIColor.white,
+                          chartCircleHoleColor: UIColor.black,
+                          topGradientHexColor: "#FFFFFF",
+                          bottomGradientHexColor: "#434343",
+                          axisTextColor: UIColor.lightGray,
+                          leftAxisFont: .boldSystemFont(ofSize: 11),
+                          xAxisFont: .boldSystemFont(ofSize: 11),
+                          chartBarColor: UIColor.white,
+                          chartBorderColor: UIColor.white,
+                          chartValueColor: UIColor.white,
+                          sliderY: sliderY)
+    }
+    
+    func initOthersTeamChart (sliderY: [String: Double]) {
+        initLineChartView(chartBackgroundColor: UIColor.white,
+                          chartLineColor: UIColor.green,
+                          chartCircleColor: UIColor.white,
+                          chartCircleHoleColor: UIColor.green,
+                          topGradientHexColor: "#434343",
+                          bottomGradientHexColor: "#FFFFFF",
+                          axisTextColor: UIColor.black,
+                          leftAxisFont: .systemFont(ofSize: 11),
+                          xAxisFont: .systemFont(ofSize: 11),
+                          chartBarColor: UIColor.darkGray,
+                          chartBorderColor: UIColor.green,
+                          chartValueColor: UIColor.black,
+                          sliderY: sliderY)
     }
 }
 

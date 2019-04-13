@@ -92,16 +92,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    // MARK: - Observing the userData changing and updating the UI
-//    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-//        if keyPath == "avatar" {
-//            if let avatar = appDelegate.user.avatar {
-//                print("updated")
-//                profileImageView.image = avatar
-//            }
-//        }
-//    }
-    
     // MARK: - Resolving the view adjustment in relation to the keyboard
     @objc func handleViewInteractionWithKeyboard (notification: NSNotification) {
         var keyboardFrame: CGRect?

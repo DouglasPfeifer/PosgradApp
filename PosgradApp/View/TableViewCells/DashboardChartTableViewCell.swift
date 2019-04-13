@@ -11,6 +11,7 @@ import Charts
 
 protocol ClassDashboardCellDelegate: class {
     func segueToMissionDetail(mission: Double, points: Double)
+    func changeChartType(cellRow: Int, completion: @escaping (Chart) -> ())
 }
 
 class DashboardChartTableViewCell: UITableViewCell, ChartViewDelegate {
@@ -19,73 +20,63 @@ class DashboardChartTableViewCell: UITableViewCell, ChartViewDelegate {
     @IBOutlet weak var chartView: UIView!
     @IBOutlet weak var teamLabel: UILabel!
     
-    var cellChart = Chart()
     var chartInView = BarLineChartViewBase()
-    var lineChartShouldBeActive = true
+    var indexPathRow : Int!
     
     weak var delegate: ClassDashboardCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        print("/////////////////")
-        print("lineChartShouldBeActive: ", lineChartShouldBeActive)
     }
     
     @IBAction func configButton(_ sender: Any) {
-        lineChartShouldBeActive = !lineChartShouldBeActive
-        let removableView = chartView.viewWithTag(101)
-        removableView?.removeFromSuperview()
-        
-        if lineChartShouldBeActive {
-            chartInView = cellChart.changeToLineChart()
-            configButton.setImage(UIImage(named:"bar_chart_black_48dp")?.withRenderingMode(.alwaysTemplate), for: .normal)
-        } else {
-            chartInView = cellChart.changeToBarChart()
-            configButton.setImage(UIImage(named:"show_chart_black_48dp")?.withRenderingMode(.alwaysTemplate), for: .normal)
-        }
-        
-        chartInView.tag = 101
-        self.chartView.addSubview(chartInView)
-        chartInView.translatesAutoresizingMaskIntoConstraints = false
-        chartInView.topAnchor.constraint(equalTo: self.chartView.topAnchor, constant: 0).isActive = true
-        chartInView.leftAnchor.constraint(equalTo: self.chartView.leftAnchor, constant: 0).isActive = true
-        chartInView.rightAnchor.constraint(equalTo: self.chartView.rightAnchor, constant: 0).isActive = true
-        chartInView.bottomAnchor.constraint(equalTo: self.chartView.bottomAnchor, constant: 0).isActive = true
-        chartInView.delegate = self
-        chartInView.setNeedsDisplay()
-        chartInView.animate(yAxisDuration: 1)
+        delegate!.changeChartType(cellRow: indexPathRow, completion: {
+            (newChart) in
+            let removableView = self.chartView.viewWithTag(101)
+            removableView?.removeFromSuperview()
+            
+            if newChart.lineChartShouldBeActive {
+                self.configButton.setImage(UIImage(named:"bar_chart_black_48dp")?.withRenderingMode(.alwaysTemplate), for: .normal)
+            } else {
+                self.configButton.setImage(UIImage(named:"show_chart_black_48dp")?.withRenderingMode(.alwaysTemplate), for: .normal)
+            }
+            
+            self.chartInView = newChart.activeChart
+            self.chartInView.tag = 101
+            self.chartView.addSubview(self.chartInView)
+            self.chartInView.translatesAutoresizingMaskIntoConstraints = false
+            self.chartInView.topAnchor.constraint(equalTo: self.chartView.topAnchor, constant: 0).isActive = true
+            self.chartInView.leftAnchor.constraint(equalTo: self.chartView.leftAnchor, constant: 0).isActive = true
+            self.chartInView.rightAnchor.constraint(equalTo: self.chartView.rightAnchor, constant: 0).isActive = true
+            self.chartInView.bottomAnchor.constraint(equalTo: self.chartView.bottomAnchor, constant: 0).isActive = true
+            self.chartInView.delegate = self
+            self.chartInView.setNeedsDisplay()
+            self.chartInView.animate(yAxisDuration: 1)
+        })
     }
     
-    func initChart(chart: BarLineChartViewBase) {
-        
-        chartInView.data = nil
+    func initChart(chart: Chart, indexPathRow: Int) {
+        self.indexPathRow = indexPathRow
         
         let removableView = chartView.viewWithTag(101)
         removableView?.removeFromSuperview()
         
-        chartInView = chart
-        
-        chartInView.tag = 101
-        self.chartView.addSubview(chartInView)
-        chartInView.translatesAutoresizingMaskIntoConstraints = false
-        chartInView.topAnchor.constraint(equalTo: self.chartView.topAnchor, constant: 0).isActive = true
-        chartInView.leftAnchor.constraint(equalTo: self.chartView.leftAnchor, constant: 0).isActive = true
-        chartInView.rightAnchor.constraint(equalTo: self.chartView.rightAnchor, constant: 0).isActive = true
-        chartInView.bottomAnchor.constraint(equalTo: self.chartView.bottomAnchor, constant: 0).isActive = true
-        chartInView.delegate = self
-        chartInView.setNeedsDisplay()
-        // chartInView.animate(yAxisDuration: 1)
-        
-        print("----------")
-        print("lineChartShouldBeActive: ", lineChartShouldBeActive)
-        print("chart.backgroundColor: ", chart.backgroundColor)
-        print("cellChart: ", cellChart.chartBackgroundColor)
+        self.chartInView = chart.activeChart
+        self.chartInView.tag = 101
+        self.chartView.addSubview(self.chartInView)
+        self.chartInView.translatesAutoresizingMaskIntoConstraints = false
+        self.chartInView.topAnchor.constraint(equalTo: self.chartView.topAnchor, constant: 0).isActive = true
+        self.chartInView.leftAnchor.constraint(equalTo: self.chartView.leftAnchor, constant: 0).isActive = true
+        self.chartInView.rightAnchor.constraint(equalTo: self.chartView.rightAnchor, constant: 0).isActive = true
+        self.chartInView.bottomAnchor.constraint(equalTo: self.chartView.bottomAnchor, constant: 0).isActive = true
+        self.chartInView.delegate = self
+        self.chartInView.setNeedsDisplay()
+        chartInView.animate(yAxisDuration: 1)
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
-        // Configure the view for the selected state
     }
     
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {

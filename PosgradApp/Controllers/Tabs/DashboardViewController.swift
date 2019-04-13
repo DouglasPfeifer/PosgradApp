@@ -54,7 +54,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     var teamsOrder = [String]()
     var teamMembers = [String: TeamMember]()
     var activities = [TeamActivity]()
-    var charts = [BarLineChartViewBase]()
+    var charts = [Chart]()
     
     var database: Firestore!
     
@@ -66,9 +66,6 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     var unsuccessfulRequests = 0
     // Is true if table view needs to refresh
     var reloadData = false
-    
-    // The number of rows being presented by the tableView
-    // var presentedRows = 1
     
     // MARK: - View life cicle
     override func viewDidLoad() {
@@ -113,6 +110,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     // Retrieve the all documents from the teams collection, all the missions from the missions collection and the user data if it's the first time loading, it completes when all requests are completed
     func retrieveGraphsData (completion: @escaping (Bool) -> ()) {
         self.teamsOrder.removeAll()
+        self.charts.removeAll()
         
         if !reloadData {
             self.appDelegate.user.retrieveUserData(database: self.database, completion: {
@@ -122,6 +120,9 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                         self.navBarProfileImageView.image = avatarImage
                     }
                     self.teamsOrder.insert(user!.team!.documentID, at: 0)
+                    let newChart = Chart()
+                    self.charts.insert(newChart, at: 0)
+                    
                     self.successfulRequests += 1
                     if self.successfulRequests == self.numberOfRequests {
                         completion(true)
@@ -135,6 +136,9 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             })
         } else {
             self.teamsOrder.insert(appDelegate.user.team!.documentID, at: 0)
+            let newChart = Chart()
+            self.charts.insert(newChart, at: 0)
+            
             self.tableView.reloadData()
         }
         
@@ -176,6 +180,8 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             self.retrieveActivitiesByTeam(team: team, completion: {
                 (success) in
                 if team.ID == userTeam {
+                    let indexPath = IndexPath(row: 0, section: 0)
+                    
                     let userTeam = self.teamsOrder[0]
                     var sliderY = self.teams[userTeam]?.scoreArrayDic
                     if sliderY?.count == 0 {
@@ -184,22 +190,8 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                                     "Missão Passport" : 0.0,
                                     "Missão Curiosity" : 0.0]]
                     }
-                    let newChart = Chart().initLineChartView(chartBackgroundColor: UIColor.darkGray,
-                                                             chartLineColor: UIColor.white,
-                                                             chartCircleColor: UIColor.white,
-                                                             chartCircleHoleColor: UIColor.black,
-                                                             topGradientHexColor: "#FFFFFF",
-                                                             bottomGradientHexColor: "#434343",
-                                                             axisTextColor: UIColor.lightGray,
-                                                             leftAxisFont: .boldSystemFont(ofSize: 11),
-                                                             xAxisFont: .boldSystemFont(ofSize: 11),
-                                                             chartBarColor: UIColor.white,
-                                                             chartBorderColor: UIColor.white,
-                                                             chartValueColor: UIColor.white,
-                                                             sliderY: sliderY![0]!)
-                    self.charts.insert(newChart, at: 0)
+                    self.charts[0].initUserTeamChart(sliderY: sliderY![0]!)
                     
-                    let indexPath = IndexPath(row: 0, section: 0)
                     self.tableView.beginUpdates()
                     self.tableView.reloadRows(at: [indexPath], with: .none)
                     self.tableView.endUpdates()
@@ -207,6 +199,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                     self.teamsOrder.append(team.ID!)
                     let row = self.teamsOrder.count - 1
                     
+                    let newChart = Chart()
                     let nextTeam = self.teamsOrder[row]
                     var sliderY = self.teams[nextTeam]?.scoreArrayDic
                     if sliderY?.count == 0 {
@@ -215,19 +208,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                                     "Missão Passport" : 0.0,
                                     "Missão Curiosity" : 0.0]]
                     }
-                    let newChart = Chart().initLineChartView(chartBackgroundColor: UIColor.white,
-                                                             chartLineColor: UIColor.green,
-                                                             chartCircleColor: UIColor.white,
-                                                             chartCircleHoleColor: UIColor.green,
-                                                             topGradientHexColor: "#434343",
-                                                             bottomGradientHexColor: "#FFFFFF",
-                                                             axisTextColor: UIColor.black,
-                                                             leftAxisFont: .systemFont(ofSize: 11),
-                                                             xAxisFont: .systemFont(ofSize: 11),
-                                                             chartBarColor: UIColor.darkGray,
-                                                             chartBorderColor: UIColor.green,
-                                                             chartValueColor: UIColor.black,
-                                                             sliderY: sliderY![0]!)
+                    newChart.initOthersTeamChart(sliderY: sliderY![0]!)
                     self.charts.append(newChart)
                     
                     let indexPath = IndexPath(row: row, section: 0)
@@ -237,13 +218,6 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                 }
             })
         }
-    }
-    
-    // Refresh the data of all the graphs when the refresh control is activated
-    @objc func refreshGraphs () {
-        reloadData = true
-        numberOfRequests = 2
-        retrieveAndUptadeGraphsData()
     }
     
     // MARK: - Retrieve firestore data
@@ -400,7 +374,13 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         refreshControl.tintColor = UIColor.white
         refreshControl.addTarget(self, action: #selector (self.refreshGraphs), for: UIControlEvents.valueChanged)
         tableView.refreshControl = refreshControl
-        //tableView.addSubview(refreshControl) // not required when using UITableViewController
+    }
+    
+    // Refresh the data of all the graphs when the refresh control is activated
+    @objc func refreshGraphs () {
+        reloadData = true
+        numberOfRequests = 2
+        retrieveAndUptadeGraphsData()
     }
     
     // Add delegate method of UIScrollView and call the method
@@ -454,28 +434,8 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         
         if indexPath.row == 0 {
             let userTeam = self.appDelegate.user.team?.documentID
-//            var sliderY = self.teams[userTeam!]?.scoreArrayDic
-//            if sliderY?.count == 0 {
-//                sliderY = [["Missão Discovery" : 0.0,
-//                            "Missão Startup" : 0.0,
-//                            "Missão Passport" : 0.0,
-//                            "Missão Curiosity" : 0.0]]
-//            }
-//
-//            cell.initChart(chartBackgroundColor: UIColor.darkGray,
-//                           chartLineColor: UIColor.white,
-//                           chartCircleColor: UIColor.white,
-//                           chartCircleHoleColor: UIColor.black,
-//                           topGradientHexColor: "#FFFFFF",
-//                           bottomGradientHexColor: "#434343",
-//                           axisTextColor: UIColor.lightGray,
-//                           leftAxisFont: .boldSystemFont(ofSize: 11),
-//                           xAxisFont: .boldSystemFont(ofSize: 11),
-//                           chartBarColor: UIColor.white,
-//                           chartBorderColor: UIColor.white,
-//                           chartValueColor: UIColor.white,
-//                           sliderY: sliderY![0]!)
             
+            cell.initChart(chart: charts[indexPath.row], indexPathRow: indexPath.row)
             cell.teamLabel.text = userTeam
             cell.backgroundColor = UIColor.darkGray
             cell.teamLabel.textColor = UIColor.white
@@ -484,28 +444,8 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             cell.delegate = self
         } else {
             let nextTeam = self.teamsOrder[indexPath.row]
-//            var sliderY = self.teams[nextTeam]?.scoreArrayDic
-//            if sliderY?.count == 0 {
-//                sliderY = [["Missão Discovery" : 0.0,
-//                            "Missão Startup" : 0.0,
-//                            "Missão Passport" : 0.0,
-//                            "Missão Curiosity" : 0.0]]
-//            }
-//
-//            cell.initChart(chartBackgroundColor: UIColor.white,
-//                           chartLineColor: UIColor.green,
-//                           chartCircleColor: UIColor.white,
-//                           chartCircleHoleColor: UIColor.green,
-//                           topGradientHexColor: "#434343",
-//                           bottomGradientHexColor: "#FFFFFF",
-//                           axisTextColor: UIColor.black,
-//                           leftAxisFont: .systemFont(ofSize: 11),
-//                           xAxisFont: .systemFont(ofSize: 11),
-//                           chartBarColor: UIColor.darkGray,
-//                           chartBorderColor: UIColor.green,
-//                           chartValueColor: UIColor.black,
-//                           sliderY: sliderY![0]!)
             
+            cell.initChart(chart: charts[indexPath.row], indexPathRow: indexPath.row)
             cell.teamLabel.text = nextTeam
             cell.backgroundColor = UIColor.white
             cell.teamLabel.textColor = UIColor.black
@@ -521,8 +461,19 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         
     }
     
+    // MARK: - Delegation functions
     func segueToMissionDetail(mission: Double, points: Double) {
         performSegue(withIdentifier: "dashboardToMissionDetails", sender: self)
+    }
+    
+    func changeChartType (cellRow: Int, completion: @escaping (Chart) -> ()) {
+        let chart = charts[cellRow]
+        if chart.lineChartShouldBeActive {
+            chart.changeToBarChart()
+        } else {
+            chart.changeToLineChart()
+        }
+        completion(chart)
     }
     
     // MARK: - Segue

@@ -105,7 +105,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         if notification.name == NSNotification.Name.UIKeyboardWillShow && viewMinY == 0 {
             if differenceBetweenTopOfKeyboardAndBottomOfTextField > 0 {
                 self.view.frame.origin.y -= CGFloat(differenceBetweenTopOfKeyboardAndBottomOfTextField + 5)
-                //(keyboardFrame?.height)!
             }
         } else if notification.name == NSNotification.Name.UIKeyboardWillHide && viewMinY != 0 {
             if viewMinY != 0 {
