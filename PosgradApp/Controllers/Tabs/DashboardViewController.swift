@@ -112,7 +112,13 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         self.teamsOrder.removeAll()
         self.charts.removeAll()
         
-        if !reloadData {
+        if reloadData {
+            self.teamsOrder.insert(appDelegate.user.team!.documentID, at: 0)
+            let newChart = Chart()
+            self.charts.insert(newChart, at: 0)
+            
+            self.tableView.reloadData()
+        } else {
             self.appDelegate.user.retrieveUserData(database: self.database, completion: {
                 (success, user) in
                 if success {
@@ -134,12 +140,6 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                     }
                 }
             })
-        } else {
-            self.teamsOrder.insert(appDelegate.user.team!.documentID, at: 0)
-            let newChart = Chart()
-            self.charts.insert(newChart, at: 0)
-            
-            self.tableView.reloadData()
         }
         
         retrieveTeams {
@@ -423,7 +423,12 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.separatorStyle = .singleLine
         cell.selectionStyle = .none
         cell.configButton.layer.cornerRadius = 18
-        cell.configButton.setImage(UIImage(named:"bar_chart_black_48dp")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        
+        if charts[indexPath.row].lineChartShouldBeActive {
+            cell.configButton.setImage(UIImage(named:"bar_chart_black_48dp")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        } else {
+            cell.configButton.setImage(UIImage(named:"show_chart_black_48dp")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        }
         cell.configButton.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5)
         cell.configButton.layer.borderWidth = 1
         cell.configButton.backgroundColor = UIColor.clear

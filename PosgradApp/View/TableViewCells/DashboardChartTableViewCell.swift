@@ -71,7 +71,6 @@ class DashboardChartTableViewCell: UITableViewCell, ChartViewDelegate {
         self.chartInView.bottomAnchor.constraint(equalTo: self.chartView.bottomAnchor, constant: 0).isActive = true
         self.chartInView.delegate = self
         self.chartInView.setNeedsDisplay()
-        chartInView.animate(yAxisDuration: 1)
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
