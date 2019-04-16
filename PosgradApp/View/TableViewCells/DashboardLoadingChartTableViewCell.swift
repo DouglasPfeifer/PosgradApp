@@ -27,6 +27,7 @@ class DashboardLoadingChartTableViewCell: UITableViewCell {
         loadingLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         loadingLabel.topAnchor.constraint(equalTo: activityIndicator.bottomAnchor, constant: 8).isActive = true
         loadingLabel.text = "Carregando..."
+        loadingLabel.numberOfLines = 0
         loadingLabel.textAlignment = .center
         loadingLabel.textColor = UIColor.lightGray
     }

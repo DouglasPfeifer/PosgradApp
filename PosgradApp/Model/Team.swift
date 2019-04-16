@@ -13,7 +13,8 @@ class Team {
     var reference : DocumentReference?
     var avatar : DocumentReference?
     var ID : String? // Também é o nome
-    var scoreArrayDic = [[String : Double]?]() // Cada posição do array corresponde a uma temporada (temporada 1, temporada 2..), cada dicionário possui a missão e a pontuação ["discovery" : 10]
+    var activitiesByPhase = [Int: [TeamActivity]]() // Each position represents one phase (0 = Passport, 1 = Curiosity, 2 = Discovery, 3 =                                           Startup)
+    var scoreArrayDic = [[String: Double]?]() // Cada posição do array corresponde a uma temporada (temporada 1, temporada 2..), cada dicionário possui a missão e a pontuação ["discovery" : 10]
     
     init(reference: DocumentReference?, avatar: DocumentReference?, ID: String?) {
         if let newAvatar = avatar {

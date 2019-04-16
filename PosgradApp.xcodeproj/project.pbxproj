@@ -32,7 +32,6 @@
 		A4B1EF9722567F3600B2FD5D /* DashboardLoadingChartTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B1EF9622567F3600B2FD5D /* DashboardLoadingChartTableViewCell.swift */; };
 		A4B1EF99225FC6CD00B2FD5D /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B1EF98225FC6CD00B2FD5D /* ProfileViewController.swift */; };
 		A4BFD7C9224CB37A00BA272B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BFD7C8224CB37A00BA272B /* User.swift */; };
-		A4BFD7CB224CB64100BA272B /* UserDefaultsKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BFD7CA224CB64100BA272B /* UserDefaultsKeys.swift */; };
 		A4CF4B0B22160CAA000C120A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CF4B0A22160CAA000C120A /* AppDelegate.swift */; };
 		A4CF4B1022160CAA000C120A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A4CF4B0E22160CAA000C120A /* Main.storyboard */; };
 		A4CF4B1222160CAA000C120A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A4CF4B1122160CAA000C120A /* Assets.xcassets */; };
@@ -88,7 +87,6 @@
 		A4B1EF9622567F3600B2FD5D /* DashboardLoadingChartTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardLoadingChartTableViewCell.swift; sourceTree = "<group>"; };
 		A4B1EF98225FC6CD00B2FD5D /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		A4BFD7C8224CB37A00BA272B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		A4BFD7CA224CB64100BA272B /* UserDefaultsKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeys.swift; sourceTree = "<group>"; };
 		A4CF4B0722160CAA000C120A /* PosgradApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PosgradApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4CF4B0A22160CAA000C120A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A4CF4B0F22160CAA000C120A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -151,12 +149,12 @@
 		A438B9AC22185A2800819F2B /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				A438B9AD22185A3F00819F2B /* Chart.swift */,
 				A4BFD7C8224CB37A00BA272B /* User.swift */,
 				A458AF752241B53C009DE671 /* Mission.swift */,
 				A458AF732241B50F009DE671 /* Team.swift */,
 				A458AF712241B4AC009DE671 /* TeamMember.swift */,
 				A458AF772241B7DF009DE671 /* TeamActivity.swift */,
+				A438B9AD22185A3F00819F2B /* Chart.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -173,7 +171,6 @@
 		A458AF6E2241ACF2009DE671 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
-				A4BFD7CA224CB64100BA272B /* UserDefaultsKeys.swift */,
 				A458AF6F2241AD1D009DE671 /* FirestoreKeys.swift */,
 			);
 			path = Constants;
@@ -521,7 +518,6 @@
 				A43DCB5D221C9A86008B4B4C /* NotificationsTableViewCell.swift in Sources */,
 				A42E1F5E221B49FB001D4229 /* SelfServiceCollectionViewCell.swift in Sources */,
 				A42E1F64221B605E001D4229 /* TimesViewController.swift in Sources */,
-				A4BFD7CB224CB64100BA272B /* UserDefaultsKeys.swift in Sources */,
 				A438B9AE22185A3F00819F2B /* Chart.swift in Sources */,
 				A4AA0E5D2238E7590027DAEF /* MissionDetailsViewController.swift in Sources */,
 				A471E7972216108400A4FAA6 /* DashboardChartTableViewCell.swift in Sources */,

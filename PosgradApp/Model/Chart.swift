@@ -11,10 +11,10 @@ import UIKit
 import Charts
 
 struct DefaultMissions {
-    static let order = ["Missão Discovery",
-                        "Missão Startup",
-                        "Missão Passport",
-                        "Missão Curiosity"]
+    static let order = ["Missão Passport",
+                        "Missão Curiosity",
+                        "Missão Discovery",
+                        "Missão Startup"]
 }
 
 class Chart: NSObject {
@@ -63,6 +63,7 @@ class Chart: NSObject {
         lineChartView.highlightPerDragEnabled = false
         lineChartView.chartDescription?.enabled = false
         lineChartView.legend.enabled = false
+        lineChartView.pinchZoomEnabled = false
         
         lineChartView.rightAxis.enabled = true
         lineChartView.rightAxis.axisMinimum = 0
@@ -142,6 +143,7 @@ class Chart: NSObject {
         barChartView.highlightPerDragEnabled = false
         barChartView.chartDescription?.enabled = false
         barChartView.legend.enabled = false
+        barChartView.pinchZoomEnabled = false
         
         barChartView.rightAxis.enabled = true
         barChartView.rightAxis.axisMinimum = 0
@@ -170,10 +172,15 @@ class Chart: NSObject {
         
         var maxY = 0.0
         let yVals = (0..<sliderX).map { (i) -> BarChartDataEntry in
-            if maxY < sliderY[DefaultMissions.order[i]]! {
-                maxY = sliderY[DefaultMissions.order[i]]!
+            if let sliderYMissionValue = sliderY[DefaultMissions.order[i]] {
+                if maxY < sliderYMissionValue {
+                    maxY = sliderYMissionValue
+                }
+                return BarChartDataEntry(x: Double(i), y: sliderYMissionValue)
+            } else {
+                maxY = 0
+                return BarChartDataEntry(x: Double(i), y: 0)
             }
-            return BarChartDataEntry(x: Double(i), y: sliderY[DefaultMissions.order[i]]!)
         }
         barChartView.leftAxis.axisMaximum = maxY + 20
         
@@ -246,10 +253,10 @@ class Chart: NSObject {
 public class DayAxisValueFormatter: NSObject, IAxisValueFormatter {
     weak var chart: BarLineChartViewBase?
     
-    let sliderXNames = ["Discovery",
-                        "Startup",
-                        "Passport",
-                        "Curiosity"]
+    let sliderXNames = ["Passport",
+                        "Curiosity",
+                        "Discovery",
+                        "Startup"]
     
     init(chart: BarLineChartViewBase) {
         self.chart = chart
