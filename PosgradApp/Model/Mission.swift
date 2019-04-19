@@ -13,10 +13,10 @@ struct Mission {
     var description : String?
     var name : String?
     var order : Int?
-    var season : DocumentReference?
+    var season : String?
     var ID : String?
     
-    init(description: String?, name: String?, order: Int?, season: DocumentReference?, ID: String?) {
+    init(description: String?, name: String?, order: Int?, season: String?, ID: String?) {
         
         if let newDescription = description {
             self.description = newDescription

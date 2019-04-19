@@ -96,7 +96,12 @@ class Chart: NSObject {
             }
             return ChartDataEntry(x: Double(i), y: sliderY[DefaultMissions.order[i]]!, icon: nil)
         }
-        lineChartView.leftAxis.axisMaximum = maxY + 20
+        // This prevents the first letter of the first mission to be cut off, havin a 3 digit (100) axisMaximum, increases the size of the leftAxis
+        if maxY == 0 {
+            lineChartView.leftAxis.axisMaximum = maxY + 100
+        } else {
+            lineChartView.leftAxis.axisMaximum = maxY + 20
+        }
         
         let set1 = LineChartDataSet(values: values, label: "")
         set1.drawIconsEnabled = false

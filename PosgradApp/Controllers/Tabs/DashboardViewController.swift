@@ -10,33 +10,40 @@ import UIKit
 import Charts
 import Firebase
 
-enum Phases: String {
-    case phase1 = "Temporada 1"
-    case phase2 = "Temporada 2"
-    case phase3 = "Temporada 3"
-    case phase4 = "Temporada 4"
-    case phase5 = "Temporada 5"
-    case phase6 = "Temporada 6"
-    case phase7 = "Temporada 7"
-    case phase8 = "Temporada 8"
-    static let order = [phase1, phase2, phase3, phase4, phase5, phase6, phase7, phase8]
+enum Seasons: String {
+    case season1 = "1ª Temporada"
+    case season2 = "2ª Temporada"
+    case season3 = "3ª Temporada"
+    case season4 = "4ª Temporada"
+    case season5 = "5ª Temporada"
+    case season6 = "6ª Temporada"
+    case season7 = "7ª Temporada"
+    case season8 = "8ª Temporada"
+    static let order = [season1, season2, season3, season4, season5, season6, season7, season8]
 }
 
 class DashboardViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, ChartViewDelegate, ClassDashboardCellDelegate {
         
     @IBOutlet weak var tableView: UITableView!
-    private var optionsTableView: UITableView? = nil
-    
+    // The button used to select the season
+    @IBOutlet weak var navBarSeasonButton: UIBarButtonItem!
+
+    // The image in the navigation bar representing the profile button and avatar of the user
     var navBarProfileImageView = UIImageView(image: UIImage(named: "account_circle_white")?.withRenderingMode(.alwaysTemplate))
-    
+    // The refresh control used to refresh the data of the tableview
     var refreshControl: UIRefreshControl!
 
+    // Dictionary with all the missions in the collection (not ordered) ["4m4XlAOKwBGwCU9AXeUn": Mission]
     var missions = [String : Mission]()
-    var missionsOrder = [String]()
+    // Array with the order of the missions by each Season [["Discovery", ...], ["Pasaporte", ...]]
+    var missionsOrder = [[String]]()
+    // Dictionary with the name and the object of the team ["Aquila" : Team]
     var teams = [String : Team]()
+    // Array with the order which the teams must be presented in the view
     var teamsOrder = [String]()
+    // Dictionary with the ID which represents the member and its object ["4ugih38g727idfn": TeamMember]
     var teamMembersByID = [String : TeamMember]()
-    var activities = [TeamActivity]()
+    // Array with all the charts being presented
     var charts = [Chart?]()
     
     var database: Firestore!
@@ -55,6 +62,8 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     // Is true if table view needs to refresh
     var reloadData = false
     
+    // The season selected by the user
+    var selectedSeason: Int = 0
     // The mission selected in the selected cell chart
     var selectedCellMission: Int!
     // The points of the selected mission in the selected cell chart
@@ -63,6 +72,19 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     var selectedCellRow: Int!
     // The team of the selected cell
     var selectedCellTeam: String!
+    
+    // The default array with the order of the missions by each Season. missionsOrder is the to this.
+    let defaultMissionsOrder = [
+        ["Passport", "Curiosity", "Discovery", "Startup"],
+        ["Passport", "Curiosity", "Discovery", "Startup"],
+        ["Passport", "Curiosity", "Discovery", "Startup"],
+        ["Passport", "Curiosity", "Discovery", "Startup"],
+        ["Passport", "Curiosity", "Discovery", "Startup"],
+        ["Passport", "Curiosity", "Discovery", "Startup"],
+        ["Passport", "Curiosity", "Discovery", "Startup"],
+        ["Passport", "Curiosity", "Discovery", "Startup"]
+    ]
+
     
     // MARK: - View life cicle
     override func viewDidLoad() {
@@ -74,6 +96,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         
         //initSearchBar()
         initProfileNavBarButton(imageView: self.navBarProfileImageView)
+        initSeasonNavBarButton()
         initFirebase()
         initRefreshControl()
         
@@ -255,13 +278,41 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                         if let missionReference = documentData[TeamActivityKeys.missionKey] as? DocumentReference {
                             let missionName = self.missions[missionReference.documentID]?.name
                             let missionOrder = self.missions[missionReference.documentID]?.order
+                            var missionSeasonInt = 0
+                            if let missionSeason = self.missions[missionReference.documentID]?.season {
+                                if let someSeason = Seasons(rawValue: missionSeason) {
+                                    switch someSeason {
+                                    case .season1:
+                                        missionSeasonInt = 0
+                                    case .season2:
+                                        missionSeasonInt = 1
+                                    case .season3:
+                                        missionSeasonInt = 2
+                                    case .season4:
+                                        missionSeasonInt = 3
+                                    case .season5:
+                                        missionSeasonInt = 4
+                                    case .season6:
+                                        missionSeasonInt = 5
+                                    case .season7:
+                                        missionSeasonInt = 6
+                                    case .season8:
+                                        missionSeasonInt = 7
+                                    default:
+                                        missionSeasonInt = 0
+                                    }
+                                } else {
+                                    missionSeasonInt = 0
+                                }
+                            }
+                            
                             var newScore : Double
                             if let score = documentData[TeamActivityKeys.scoreKey] as? Double {
                                 newScore = score
                             } else {
                                 newScore = 0.0
                             }
-                            team.updateScore(phase: 0, mission: missionName!, newScore: newScore)
+                            team.updateScore(season: missionSeasonInt, mission: missionName!, newScore: newScore)
                             
                             let newFile = documentData[TeamActivityKeys.fileKey] as? String
                             let newAppraiser = documentData[TeamActivityKeys.appraiserKey] as? String
@@ -274,7 +325,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                             let newType = documentData[TeamActivityKeys.typeKey] as? String
                             let newActivity = TeamActivity.init(file: newFile, appraiser: newAppraiser, feedback: newFeedback, member: newMember, mission: newMission, name: newName, score: newMissionScore, type: newType, team: newTeam, ID: document.documentID)
                             teamActivities.append(newActivity)
-                            self.teams[team.ID!]!.activitiesByPhase[missionOrder!] = teamActivities
+                            self.teams[team.ID!]!.activitiesBySeasonByPhase[missionSeasonInt][missionOrder!] = teamActivities
                         }
                     }
                 }
@@ -291,19 +342,48 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                 completion(false)
             } else {
                 self.missions.removeAll()
-                self.missionsOrder = ["Passport",
-                                      "Curiosity",
-                                      "Discovery",
-                                      "Startup"]
+                self.missionsOrder = self.defaultMissionsOrder
                 for document in querySnapshot!.documents {
                     if let documentData = document.data() as? [String : Any] {
                         let newDescription = documentData[MissionKeys.descrptionKey] as? String
                         let newName = documentData[MissionKeys.nameKey] as? String
-                        let newOrder = documentData[MissionKeys.orderKey] as? Int
+                        var newOrder = documentData[MissionKeys.orderKey] as? Int
+                        if newOrder == nil {
+                            if let newOrderString = documentData[MissionKeys.orderKey] as? String {
+                                newOrder = Int(newOrderString)
+                            }
+                        }
                         let newSeason = documentData[MissionKeys.seasonKey] as? DocumentReference
-                        let newMission = Mission(description: newDescription, name: newName, order: newOrder, season: newSeason, ID: document.documentID)
+                        let seasonName = newSeason?.documentID
+                        print(seasonName)
+                        var seasonInt = 0
+                        if let someSeason = Seasons(rawValue: seasonName!) {
+                            switch someSeason {
+                            case .season1:
+                                seasonInt = 0
+                            case .season2:
+                                seasonInt = 1
+                            case .season3:
+                                seasonInt = 2
+                            case .season4:
+                                seasonInt = 3
+                            case .season5:
+                                seasonInt = 4
+                            case .season6:
+                                seasonInt = 5
+                            case .season7:
+                                seasonInt = 6
+                            case .season8:
+                                seasonInt = 7
+                            default:
+                                seasonInt = 0
+                            }
+                        } else {
+                            seasonInt = 0
+                        }
+                        let newMission = Mission(description: newDescription, name: newName, order: newOrder, season: seasonName, ID: document.documentID)
                         self.missions[document.documentID] = newMission
-                        self.missionsOrder[newOrder! - 1] = document.documentID
+                        self.missionsOrder[seasonInt][newOrder! - 1] = document.documentID
                     }
                 }
                 completion(true)
@@ -375,6 +455,10 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         definesPresentationContext = true
     }
     
+    func initSeasonNavBarButton () {
+        navBarSeasonButton.title = String(format: "%dª Temporada", (selectedSeason + 1))
+    }
+    
     func initFirebase () {
         database = Firestore.firestore()
         let settings = database.settings
@@ -394,6 +478,11 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard let height = navigationController?.navigationBar.frame.height else { return }
         moveAndResizeImage(for: height, imageView: navBarProfileImageView)
+    }
+    
+    // MARK: - Button action functions
+    @IBAction func showSeasonSelectionView(_ sender: Any) {
+        
     }
     
     // MARK: - TableView delegate
@@ -459,6 +548,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                 cell.configButton.layer.borderColor = UIColor.white.cgColor
                 cell.configButton.tintColor = UIColor.white
                 cell.delegate = self
+                cell.chartView.setNeedsLayout()
             } else {
                 let nextTeam = self.teamsOrder[indexPath.row]
                 
@@ -490,6 +580,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                 cell.configButton.layer.borderColor = UIColor.white.cgColor
                 cell.configButton.tintColor = UIColor.white
                 cell.delegate = self
+                cell.chartView.setNeedsLayout()
             } else {
                 let nextTeam = self.teamsOrder[indexPath.row]
                 
@@ -539,12 +630,12 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             
             let destinationVC = segue.destination as! MissionDetailsViewController
             
-            let missionID = missionsOrder[selectedCellMission]
+            let missionID = missionsOrder[selectedSeason][selectedCellMission]
             destinationVC.team = teams[selectedCellTeam]
             destinationVC.season = 0
             destinationVC.mission = missions[missionID]
             destinationVC.totalPoints = selectedCellPoints
-            destinationVC.missionActivities = teams[selectedCellTeam]?.activitiesByPhase[selectedCellMission]
+            destinationVC.missionActivities = teams[selectedCellTeam]?.activitiesBySeasonByPhase[selectedSeason][selectedCellMission]
         }
         if segue.identifier == "dashboardToProfile" {
             let destinationVC = segue.destination as! ProfileViewController

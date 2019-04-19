@@ -12,9 +12,21 @@ import Firebase
 class Team {
     var reference : DocumentReference?
     var avatar : DocumentReference?
-    var ID : String? // Também é o nome
-    var activitiesByPhase = [Int: [TeamActivity]]() // Each position represents one phase (0 = Passport, 1 = Curiosity, 2 = Discovery, 3 =                                           Startup)
-    var scoreArrayDic = [[String: Double]?]() // Cada posição do array corresponde a uma temporada (temporada 1, temporada 2..), cada dicionário possui a missão e a pontuação ["discovery" : 10]
+    var ID : String? // Also is the name
+    // Each position of the array represents one Season ([0] = 1ª Temporada, [1] = 2ª Temporada, ...) and each key in the dictionary represents one Phase (0 = Passport, 1 = Curiosity, 2 = Discovery, 3 = Startup), each value of the dictionary has an array with activities and these are the activities of the given Season and the given Phase.
+    var activitiesBySeasonByPhase = [
+                                        [Int: [TeamActivity]](),
+                                        [Int: [TeamActivity]](),
+                                        [Int: [TeamActivity]](),
+                                        [Int: [TeamActivity]](),
+                                        [Int: [TeamActivity]](),
+                                        [Int: [TeamActivity]](),
+                                        [Int: [TeamActivity]](),
+                                        [Int: [TeamActivity]]()
+                                    ]
+    // [[Int: [TeamActivity]]]()
+    // Each position represents one Season ([0] = 1ª Temporada, [1] = 2ª Temporada, ...) and each dictionary has a mission with its score ["discovery" : 10]
+    var scoreArrayDic = [[String: Double]?]()
     
     init(reference: DocumentReference?, avatar: DocumentReference?, ID: String?) {
         if let newAvatar = avatar {
@@ -34,17 +46,17 @@ class Team {
         }
     }
     
-    func updateScore (phase: Int, mission: String, newScore: Double) {
-        if self.scoreArrayDic.count > phase {
-            if let scoreArray = self.scoreArrayDic[phase] {
+    func updateScore (season: Int, mission: String, newScore: Double) {
+        if self.scoreArrayDic.count > season {
+            if let scoreArray = self.scoreArrayDic[season] {
                 if let presentScore = scoreArray[mission] {
-                    self.scoreArrayDic[phase]![mission] = presentScore + newScore
+                    self.scoreArrayDic[season]![mission] = presentScore + newScore
                 } else {
-                    self.scoreArrayDic[phase]![mission] = newScore
+                    self.scoreArrayDic[season]![mission] = newScore
                 }
             } else {
                 let newElement = [mission : newScore]
-                self.scoreArrayDic[phase] = newElement
+                self.scoreArrayDic[season] = newElement
             }
         } else {
             let newElement = [mission : newScore]

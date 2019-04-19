@@ -419,7 +419,7 @@
             <objects>
                 <viewController id="mrt-YY-L9n" customClass="DashboardViewController" customModule="PosgradApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="oBV-hi-lhf">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="457"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="gP5-6s-jmy">
@@ -496,8 +496,19 @@
                         <viewLayoutGuide key="safeArea" id="cDy-Wf-p9U"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Dashboard" id="g06-Ru-9Kl"/>
-                    <navigationItem key="navigationItem" title="Dashboard" id="1k8-Lb-PHn"/>
+                    <navigationItem key="navigationItem" title="Dashboard" id="1k8-Lb-PHn">
+                        <barButtonItem key="leftBarButtonItem" title="Temporada" style="done" id="ZFW-wl-4Af">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="showSeasonSelectionView:" destination="mrt-YY-L9n" id="BX7-56-IE3"/>
+                                <segue destination="OtO-JS-gpg" kind="popoverPresentation" popoverAnchorBarButtonItem="ZFW-wl-4Af" id="ebx-53-iUt">
+                                    <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                </segue>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
+                        <outlet property="navBarSeasonButton" destination="ZFW-wl-4Af" id="OZ5-FR-8hj"/>
                         <outlet property="tableView" destination="gP5-6s-jmy" id="RxR-jY-2Ks"/>
                         <segue destination="9e6-Og-24r" kind="show" identifier="dashboardToMissionDetails" id="nSX-LN-PQc"/>
                         <segue destination="JM4-nS-IyK" kind="presentation" identifier="dashboardToProfile" id="V9S-VN-0yx"/>
@@ -506,6 +517,21 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nke-PN-Y0e" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="326" y="-484"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="wLP-As-LP6">
+            <objects>
+                <viewController id="OtO-JS-gpg" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="YNs-JK-GDZ">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="zOS-I3-p0b"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uuV-EX-pxX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1142" y="-485"/>
         </scene>
         <!--Profile View Controller-->
         <scene sceneID="uoA-pz-PPs">
@@ -643,7 +669,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Oy9-ha-mNa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1085.625" y="-1215.8450704225352"/>
+            <point key="canvasLocation" x="1142" y="-1935"/>
         </scene>
         <!--Mission Details View Controller-->
         <scene sceneID="Jvx-uZ-mVE">
@@ -658,7 +684,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LHj-2P-Lp2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1086" y="-485"/>
+            <point key="canvasLocation" x="1142" y="-1205"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="DIy-7Z-204">
