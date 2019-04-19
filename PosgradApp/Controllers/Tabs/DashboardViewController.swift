@@ -22,7 +22,7 @@ enum Seasons: String {
     static let order = [season1, season2, season3, season4, season5, season6, season7, season8]
 }
 
-class DashboardViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, ChartViewDelegate, ClassDashboardCellDelegate {
+class DashboardViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, UIPopoverPresentationControllerDelegate, ChartViewDelegate, ClassDashboardCellDelegate, ClassSeasonSelectionDelegate {
         
     @IBOutlet weak var tableView: UITableView!
     // The button used to select the season
@@ -75,14 +75,14 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     
     // The default array with the order of the missions by each Season. missionsOrder is the to this.
     let defaultMissionsOrder = [
-        ["Passport", "Curiosity", "Discovery", "Startup"],
-        ["Passport", "Curiosity", "Discovery", "Startup"],
-        ["Passport", "Curiosity", "Discovery", "Startup"],
-        ["Passport", "Curiosity", "Discovery", "Startup"],
-        ["Passport", "Curiosity", "Discovery", "Startup"],
-        ["Passport", "Curiosity", "Discovery", "Startup"],
-        ["Passport", "Curiosity", "Discovery", "Startup"],
-        ["Passport", "Curiosity", "Discovery", "Startup"]
+        ["", "", "", ""],
+        ["", "", "", ""],
+        ["", "", "", ""],
+        ["", "", "", ""],
+        ["", "", "", ""],
+        ["", "", "", ""],
+        ["", "", "", ""],
+        ["", "", "", ""]
     ]
 
     
@@ -220,7 +220,11 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                                         "Missão Passport" : 0.0,
                                         "Missão Curiosity" : 0.0]]
                         }
-                        self.charts[0]!.initUserTeamChart(sliderY: sliderY![0]!)
+                        if sliderY!.count > self.selectedSeason {
+                            self.charts[0]!.initUserTeamChart(sliderY: sliderY![self.selectedSeason]!)
+                        } else {
+                            print("error")
+                        }
                     } else {
                         self.failedRequest = true
                         self.charts[0] = nil
@@ -242,8 +246,12 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                                         "Missão Passport" : 0.0,
                                         "Missão Curiosity" : 0.0]]
                         }
-                        newChart.initOthersTeamChart(sliderY: sliderY![0]!)
-                        self.charts.append(newChart)
+                        if sliderY!.count > self.selectedSeason {
+                            newChart.initOthersTeamChart(sliderY: sliderY![self.selectedSeason]!)
+                            self.charts.append(newChart)
+                        } else {
+                            print("error")
+                        }
                     } else {
                         self.failedRequest = true
                         self.charts.append(nil)
@@ -280,6 +288,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                             let missionOrder = self.missions[missionReference.documentID]?.order
                             var missionSeasonInt = 0
                             if let missionSeason = self.missions[missionReference.documentID]?.season {
+                                // print(missionSeason)
                                 if let someSeason = Seasons(rawValue: missionSeason) {
                                     switch someSeason {
                                     case .season1:
@@ -312,6 +321,8 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                             } else {
                                 newScore = 0.0
                             }
+                            //print("missionSeasonInt: ", missionSeasonInt, "missionName: ", missionName!, "newScore: ", newScore)
+                            
                             team.updateScore(season: missionSeasonInt, mission: missionName!, newScore: newScore)
                             
                             let newFile = documentData[TeamActivityKeys.fileKey] as? String
@@ -355,7 +366,6 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                         }
                         let newSeason = documentData[MissionKeys.seasonKey] as? DocumentReference
                         let seasonName = newSeason?.documentID
-                        print(seasonName)
                         var seasonInt = 0
                         if let someSeason = Seasons(rawValue: seasonName!) {
                             switch someSeason {
@@ -381,6 +391,9 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                         } else {
                             seasonInt = 0
                         }
+                        
+                        // print("seasonName: ", seasonName, "missionSeasonInt: ", seasonInt, "missionName: ", newName!)
+
                         let newMission = Mission(description: newDescription, name: newName, order: newOrder, season: seasonName, ID: document.documentID)
                         self.missions[document.documentID] = newMission
                         self.missionsOrder[seasonInt][newOrder! - 1] = document.documentID
@@ -480,9 +493,30 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         moveAndResizeImage(for: height, imageView: navBarProfileImageView)
     }
     
-    // MARK: - Button action functions
+    // MARK: - Season selection popover functions
     @IBAction func showSeasonSelectionView(_ sender: Any) {
         
+    }
+    
+    func popoverPresentationControllerDidDismissPopover(popoverPresentationController: UIPopoverPresentationController) {
+        //do som stuff from the popover
+    }
+    
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return UIModalPresentationStyle.none
+    }
+    
+    func seasonSelected(season: Int) {
+        if self.missionsOrder[season][0] != "" {
+            self.selectedSeason = season
+            navBarSeasonButton.title = String(format: "%dª Temporada", (selectedSeason + 1))
+            refreshGraphs()
+        } else {
+            let invalidSeasonAlert = UIAlertController(title: "Temporada inválida", message: "Essa temporada ainda não aconteceu.", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "Ok", style: .default)
+            invalidSeasonAlert.addAction(okAction)
+            self.present(invalidSeasonAlert, animated: true, completion: nil)
+        }
     }
     
     // MARK: - TableView delegate
@@ -510,15 +544,41 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             self.firstLoad = false
             self.reloadData = false
             let cell = tableView.dequeueReusableCell(withIdentifier: "chartLoadingTableViewCell", for: indexPath) as! DashboardLoadingChartTableViewCell
+            cell.initLoadingCell()
+            cell.selectionStyle = .none
             cell.activityIndicator.startAnimating()
             tableView.separatorStyle = .none
             return cell
         } else if self.failedRequest {
             self.failedRequest = false
             let cell = tableView.dequeueReusableCell(withIdentifier: "chartLoadingTableViewCell", for: indexPath) as! DashboardLoadingChartTableViewCell
+            cell.initLoadingCell()
+            cell.selectionStyle = .none
             cell.activityIndicator.stopAnimating()
             cell.loadingLabel.text = "Não foi possível obter os dados dos times, tente novamente mais tarde."
             tableView.separatorStyle = .none
+            return cell
+        } else if charts.count <= indexPath.row {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "chartLoadingTableViewCell", for: indexPath) as! DashboardLoadingChartTableViewCell
+            cell.cellDataUnavailable()
+            cell.selectionStyle = .none
+            cell.teamLabel.text = self.teamsOrder[indexPath.row]
+            cell.teamLabel.textColor = UIColor.black
+            cell.loadingLabel.textColor = UIColor.darkGray
+            cell.failImageView.tintColor = UIColor.darkGray
+            cell.backgroundColor = UIColor.white
+            tableView.separatorStyle = .singleLine
+            return cell
+        } else if charts.count == 1 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "chartLoadingTableViewCell", for: indexPath) as! DashboardLoadingChartTableViewCell
+            cell.cellDataUnavailable()
+            cell.selectionStyle = .none
+            cell.teamLabel.text = self.appDelegate.user.team?.documentID
+            cell.teamLabel.textColor = UIColor.white
+            cell.loadingLabel.textColor = UIColor.lightGray
+            cell.failImageView.tintColor = UIColor.lightGray
+            cell.backgroundColor = UIColor.clear
+            tableView.separatorStyle = .singleLine
             return cell
         }
         
@@ -526,7 +586,8 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
 
         tableView.separatorStyle = .singleLine
         cell.selectionStyle = .none
-        
+        print(charts.count < indexPath.row)
+        print("charts.count: ", charts.count, " < ", "indexPath.row: ", indexPath.row)
         if let cellChart = charts[indexPath.row] {
             cell.configButton.layer.cornerRadius = 18
             if cellChart.lineChartShouldBeActive {
@@ -636,9 +697,19 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             destinationVC.mission = missions[missionID]
             destinationVC.totalPoints = selectedCellPoints
             destinationVC.missionActivities = teams[selectedCellTeam]?.activitiesBySeasonByPhase[selectedSeason][selectedCellMission]
-        }
-        if segue.identifier == "dashboardToProfile" {
+        
+        } else if segue.identifier == "dashboardToProfile" {
             let destinationVC = segue.destination as! ProfileViewController
+        
+        } else if segue.identifier == "showSeasonSelection" {
+            let destinationVC = segue.destination as! SeasonSelectionTableViewController
+            destinationVC.popoverPresentationController!.delegate = self
+            var screenWidth = self.view.frame.width
+            var screenHeight = self.view.frame.height
+            screenWidth = screenWidth - (screenWidth * 0.4)
+            screenHeight = screenHeight - (screenHeight * 0.6)
+            destinationVC.preferredContentSize = CGSize(width: screenWidth, height: screenHeight)
+            destinationVC.delegate = self
         }
     }
 }
