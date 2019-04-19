@@ -19,6 +19,8 @@
 		A43DCB5B221C8FA7008B4B4C /* NewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43DCB5A221C8FA7008B4B4C /* NewsViewController.swift */; };
 		A43DCB5D221C9A86008B4B4C /* NotificationsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43DCB5C221C9A86008B4B4C /* NotificationsTableViewCell.swift */; };
 		A43DCB5F221C9A98008B4B4C /* BreakingNewsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43DCB5E221C9A98008B4B4C /* BreakingNewsTableViewCell.swift */; };
+		A45592FB226A57B20051D82D /* SeasonSelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45592FA226A57B20051D82D /* SeasonSelectionTableViewController.swift */; };
+		A45592FD226A59CE0051D82D /* SeasonSelectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45592FC226A59CE0051D82D /* SeasonSelectionTableViewCell.swift */; };
 		A458AF702241AD1D009DE671 /* FirestoreKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = A458AF6F2241AD1D009DE671 /* FirestoreKeys.swift */; };
 		A458AF722241B4AC009DE671 /* TeamMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = A458AF712241B4AC009DE671 /* TeamMember.swift */; };
 		A458AF742241B50F009DE671 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = A458AF732241B50F009DE671 /* Team.swift */; };
@@ -74,6 +76,8 @@
 		A43DCB5A221C8FA7008B4B4C /* NewsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewController.swift; sourceTree = "<group>"; };
 		A43DCB5C221C9A86008B4B4C /* NotificationsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsTableViewCell.swift; sourceTree = "<group>"; };
 		A43DCB5E221C9A98008B4B4C /* BreakingNewsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakingNewsTableViewCell.swift; sourceTree = "<group>"; };
+		A45592FA226A57B20051D82D /* SeasonSelectionTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonSelectionTableViewController.swift; sourceTree = "<group>"; };
+		A45592FC226A59CE0051D82D /* SeasonSelectionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonSelectionTableViewCell.swift; sourceTree = "<group>"; };
 		A458AF6F2241AD1D009DE671 /* FirestoreKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreKeys.swift; sourceTree = "<group>"; };
 		A458AF712241B4AC009DE671 /* TeamMember.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamMember.swift; sourceTree = "<group>"; };
 		A458AF732241B50F009DE671 /* Team.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
@@ -227,7 +231,7 @@
 			children = (
 				A471E7962216108400A4FAA6 /* DashboardChartTableViewCell.swift */,
 				A4B1EF9622567F3600B2FD5D /* DashboardLoadingChartTableViewCell.swift */,
-				A42E1F5D221B49FB001D4229 /* SelfServiceCollectionViewCell.swift */,
+				A45592FC226A59CE0051D82D /* SeasonSelectionTableViewCell.swift */,
 				A43DCB5C221C9A86008B4B4C /* NotificationsTableViewCell.swift */,
 				A43DCB5E221C9A98008B4B4C /* BreakingNewsTableViewCell.swift */,
 			);
@@ -237,6 +241,7 @@
 		A4AA0E5A2238E1060027DAEF /* CollectionViewCells */ = {
 			isa = PBXGroup;
 			children = (
+				A42E1F5D221B49FB001D4229 /* SelfServiceCollectionViewCell.swift */,
 				A42E1F5F221B5FA2001D4229 /* TimesCollectionViewCell.swift */,
 			);
 			path = CollectionViewCells;
@@ -247,6 +252,7 @@
 			children = (
 				A4B1EF98225FC6CD00B2FD5D /* ProfileViewController.swift */,
 				A4AA0E5C2238E7590027DAEF /* MissionDetailsViewController.swift */,
+				A45592FA226A57B20051D82D /* SeasonSelectionTableViewController.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -519,6 +525,7 @@
 				A42E1F5E221B49FB001D4229 /* SelfServiceCollectionViewCell.swift in Sources */,
 				A42E1F64221B605E001D4229 /* TimesViewController.swift in Sources */,
 				A438B9AE22185A3F00819F2B /* Chart.swift in Sources */,
+				A45592FB226A57B20051D82D /* SeasonSelectionTableViewController.swift in Sources */,
 				A4AA0E5D2238E7590027DAEF /* MissionDetailsViewController.swift in Sources */,
 				A471E7972216108400A4FAA6 /* DashboardChartTableViewCell.swift in Sources */,
 				A4CF4B0B22160CAA000C120A /* AppDelegate.swift in Sources */,
@@ -539,6 +546,7 @@
 				A458AF782241B7DF009DE671 /* TeamActivity.swift in Sources */,
 				A438B9B322189D8A00819F2B /* ViewControllerExtensions.swift in Sources */,
 				A4BFD7C9224CB37A00BA272B /* User.swift in Sources */,
+				A45592FD226A59CE0051D82D /* SeasonSelectionTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
