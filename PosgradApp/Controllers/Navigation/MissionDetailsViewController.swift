@@ -22,6 +22,11 @@ class MissionDetailsViewController: UIViewController {
     var totalScore: Double?
     var missionActivities: [TeamActivity]?
     
+    // Animation values
+    var scoreStartValue: Double = 0
+    var scoreAnimationDuration: Double = 1.5
+    var scoreAnimationStartDate = Date()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -30,6 +35,9 @@ class MissionDetailsViewController: UIViewController {
         initNavigationBar()
         
         initScrollView()
+        
+        let displayLink = CADisplayLink(target: self, selector: #selector(handleUpdate))
+        displayLink.add(to: .main, forMode: .defaultRunLoopMode)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -58,25 +66,20 @@ class MissionDetailsViewController: UIViewController {
         missionNameLabel.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 16).isActive = true
         missionNameLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16).isActive = true
         missionNameLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16).isActive = true
-        missionNameLabel.font = UIFont.boldSystemFont(ofSize: 20)
-        missionNameLabel.text = mission?.name
+        missionNameLabel.font = UIFont(name: "pixelmix", size: 24)
+        missionNameLabel.text = mission?.name?.replacingOccurrences(of: "ã", with: "a")
         missionNameLabel.textAlignment = .center
         missionNameLabel.numberOfLines = 0
         
         scrollView.addSubview(scoreLabel)
         scoreLabel.translatesAutoresizingMaskIntoConstraints = false
-        scoreLabel.topAnchor.constraint(equalTo: missionNameLabel.bottomAnchor, constant: 8).isActive = true
+        scoreLabel.topAnchor.constraint(equalTo: missionNameLabel.bottomAnchor, constant: 16).isActive = true
         scoreLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16).isActive = true
         scoreLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16).isActive = true
         scoreLabel.numberOfLines = 0
-        scoreLabel.textAlignment = .right
-        let scoreBoldText  = "Pontos"
-        let scoreAttrs = [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 16)]
-        let scoreAttributedString = NSMutableAttributedString(string:scoreBoldText, attributes:scoreAttrs)
-        let scoreNormalText = String(format: "%.0f", totalScore!)
-        let scoreNormalString = NSMutableAttributedString(string:scoreNormalText)
-        scoreAttributedString.append(scoreNormalString)
-        scoreLabel.attributedText = scoreAttributedString
+        scoreLabel.textAlignment = .center
+        scoreLabel.font = UIFont(name: "pixelmix", size: 20)
+        scoreLabel.text = "Pontuação: \(Int(totalScore!))"
         
         activityStackView.removeAll()
         if let activities = missionActivities {
@@ -110,10 +113,9 @@ class MissionDetailsViewController: UIViewController {
             }
         }
         
-        
         scrollView.addSubview(missionDescriptionLabel)
         missionDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        missionDescriptionLabel.topAnchor.constraint(equalTo: scoreLabel.bottomAnchor, constant: 8).isActive = true
+        missionDescriptionLabel.topAnchor.constraint(equalTo: scoreLabel.bottomAnchor, constant: 24).isActive = true
         missionDescriptionLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16).isActive = true
         missionDescriptionLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16).isActive = true
         if let lastAtivity = activityStackView.last {
@@ -121,14 +123,22 @@ class MissionDetailsViewController: UIViewController {
         } else {
             missionDescriptionLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -16).isActive = true
         }
-        missionDescriptionLabel.font = UIFont.systemFont(ofSize: 17)
+        missionDescriptionLabel.font = UIFont(name: "pixelmix", size: 16)
         missionDescriptionLabel.numberOfLines = 0
-        let missionBoldText  = "Descrição: "
-        let missionAttrs = [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 17)]
-        let missionAttributedString = NSMutableAttributedString(string:missionBoldText, attributes:missionAttrs)
-        let missionNormalText = mission!.description!
-        let missionNormalString = NSMutableAttributedString(string:missionNormalText)
-        missionAttributedString.append(missionNormalString)
-        missionDescriptionLabel.attributedText = missionAttributedString
+        missionDescriptionLabel.text = mission?.description?.replacingOccurrences(of: "ã", with: "a").replacingOccurrences(of: "ç", with: "c")
+        missionDescriptionLabel.textAlignment = .justified
+    }
+    
+    @objc func handleUpdate () {
+        let now = Date()
+        let elapsedTime = now.timeIntervalSince(scoreAnimationStartDate)
+        
+        if elapsedTime > scoreAnimationDuration {
+            self.scoreLabel.text = "Pontuação: \(Int(totalScore!))"
+        } else {
+            let percentage = elapsedTime / scoreAnimationDuration
+            let value = percentage * (totalScore! - scoreStartValue)
+            self.scoreLabel.text = "Pontuação: \(Int(value))"
+        }
     }
 }
