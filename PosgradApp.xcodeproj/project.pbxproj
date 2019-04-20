@@ -21,6 +21,7 @@
 		A43DCB5F221C9A98008B4B4C /* BreakingNewsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43DCB5E221C9A98008B4B4C /* BreakingNewsTableViewCell.swift */; };
 		A45592FB226A57B20051D82D /* SeasonSelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45592FA226A57B20051D82D /* SeasonSelectionTableViewController.swift */; };
 		A45592FD226A59CE0051D82D /* SeasonSelectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45592FC226A59CE0051D82D /* SeasonSelectionTableViewCell.swift */; };
+		A4559300226AA01C0051D82D /* ActivityDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45592FF226AA01C0051D82D /* ActivityDetailsView.swift */; };
 		A458AF702241AD1D009DE671 /* FirestoreKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = A458AF6F2241AD1D009DE671 /* FirestoreKeys.swift */; };
 		A458AF722241B4AC009DE671 /* TeamMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = A458AF712241B4AC009DE671 /* TeamMember.swift */; };
 		A458AF742241B50F009DE671 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = A458AF732241B50F009DE671 /* Team.swift */; };
@@ -78,6 +79,7 @@
 		A43DCB5E221C9A98008B4B4C /* BreakingNewsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakingNewsTableViewCell.swift; sourceTree = "<group>"; };
 		A45592FA226A57B20051D82D /* SeasonSelectionTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonSelectionTableViewController.swift; sourceTree = "<group>"; };
 		A45592FC226A59CE0051D82D /* SeasonSelectionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonSelectionTableViewCell.swift; sourceTree = "<group>"; };
+		A45592FF226AA01C0051D82D /* ActivityDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityDetailsView.swift; sourceTree = "<group>"; };
 		A458AF6F2241AD1D009DE671 /* FirestoreKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreKeys.swift; sourceTree = "<group>"; };
 		A458AF712241B4AC009DE671 /* TeamMember.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamMember.swift; sourceTree = "<group>"; };
 		A458AF732241B50F009DE671 /* Team.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
@@ -172,6 +174,14 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		A45592FE226A9F9A0051D82D /* CustomUIViews */ = {
+			isa = PBXGroup;
+			children = (
+				A45592FF226AA01C0051D82D /* ActivityDetailsView.swift */,
+			);
+			path = CustomUIViews;
+			sourceTree = "<group>";
+		};
 		A458AF6E2241ACF2009DE671 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
@@ -205,6 +215,7 @@
 		A471E7952216105A00A4FAA6 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				A45592FE226A9F9A0051D82D /* CustomUIViews */,
 				A4AA0E592238E0F00027DAEF /* TableViewCells */,
 				A4AA0E5A2238E1060027DAEF /* CollectionViewCells */,
 			);
@@ -251,8 +262,8 @@
 			isa = PBXGroup;
 			children = (
 				A4B1EF98225FC6CD00B2FD5D /* ProfileViewController.swift */,
-				A4AA0E5C2238E7590027DAEF /* MissionDetailsViewController.swift */,
 				A45592FA226A57B20051D82D /* SeasonSelectionTableViewController.swift */,
+				A4AA0E5C2238E7590027DAEF /* MissionDetailsViewController.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -526,6 +537,7 @@
 				A42E1F64221B605E001D4229 /* TimesViewController.swift in Sources */,
 				A438B9AE22185A3F00819F2B /* Chart.swift in Sources */,
 				A45592FB226A57B20051D82D /* SeasonSelectionTableViewController.swift in Sources */,
+				A4559300226AA01C0051D82D /* ActivityDetailsView.swift in Sources */,
 				A4AA0E5D2238E7590027DAEF /* MissionDetailsViewController.swift in Sources */,
 				A471E7972216108400A4FAA6 /* DashboardChartTableViewCell.swift in Sources */,
 				A4CF4B0B22160CAA000C120A /* AppDelegate.swift in Sources */,

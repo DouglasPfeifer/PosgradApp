@@ -336,7 +336,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                             let newType = documentData[TeamActivityKeys.typeKey] as? String
                             let newActivity = TeamActivity.init(file: newFile, appraiser: newAppraiser, feedback: newFeedback, member: newMember, mission: newMission, name: newName, score: newMissionScore, type: newType, team: newTeam, ID: document.documentID)
                             teamActivities.append(newActivity)
-                            self.teams[team.ID!]!.activitiesBySeasonByPhase[missionSeasonInt][missionOrder!] = teamActivities
+                            self.teams[team.ID!]!.activitiesBySeasonByPhase[missionSeasonInt][(missionOrder! - 1)] = teamActivities
                         }
                     }
                 }
@@ -586,8 +586,6 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
 
         tableView.separatorStyle = .singleLine
         cell.selectionStyle = .none
-        print(charts.count < indexPath.row)
-        print("charts.count: ", charts.count, " < ", "indexPath.row: ", indexPath.row)
         if let cellChart = charts[indexPath.row] {
             cell.configButton.layer.cornerRadius = 18
             if cellChart.lineChartShouldBeActive {
@@ -693,9 +691,9 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             
             let missionID = missionsOrder[selectedSeason][selectedCellMission]
             destinationVC.team = teams[selectedCellTeam]
-            destinationVC.season = 0
+            destinationVC.season = selectedSeason
             destinationVC.mission = missions[missionID]
-            destinationVC.totalPoints = selectedCellPoints
+            destinationVC.totalScore = selectedCellPoints
             destinationVC.missionActivities = teams[selectedCellTeam]?.activitiesBySeasonByPhase[selectedSeason][selectedCellMission]
         
         } else if segue.identifier == "dashboardToProfile" {
