@@ -26,7 +26,7 @@ class ActivityDetailsView: UIView {
         activityType.textColor = UIColor.black
         activityType.layer.masksToBounds = true
         activityType.layer.cornerRadius = 6
-        activityType.font = UIFont.systemFont(ofSize: 15)
+        activityType.font = UIFont(name: Font.pixel, size: 15)
         activityType.text = String(format: " %@ ", type)
         
         self.addSubview(showActivityDetails)
@@ -36,33 +36,24 @@ class ActivityDetailsView: UIView {
         showActivityDetails.rightAnchor.constraint(lessThanOrEqualTo: activityType.leftAnchor, constant: -8).isActive = true
         showActivityDetails.setTitleColor(UIColor.blue, for: .normal)
         showActivityDetails.setTitle(name, for: .normal)
-        showActivityDetails.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
+        showActivityDetails.titleLabel?.font = UIFont(name: Font.pixel, size: 17)
         
         self.addSubview(activityScore)
         activityScore.translatesAutoresizingMaskIntoConstraints = false
         activityScore.topAnchor.constraint(equalTo: showActivityDetails.bottomAnchor, constant: 8).isActive = true
         activityScore.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8).isActive = true
         activityScore.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -8).isActive = true
-        let scoreBoldText  = "Pontuação: "
-        let scoreAttrs = [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 17)]
-        let scoreAttributedString = NSMutableAttributedString(string: scoreBoldText, attributes: scoreAttrs)
-        let scoreNormalText = String(format: "%.0f", score)
-        let scoreNormalString = NSMutableAttributedString(string: scoreNormalText)
-        scoreAttributedString.append(scoreNormalString)
-        activityScore.attributedText = scoreAttributedString
+        activityScore.font = UIFont(name: Font.pixel, size: 17)
+        activityScore.text = "Pontuacao: \(Int(score))"
+        activityScore.numberOfLines = 0
         
         self.addSubview(activityAppraiser)
         activityAppraiser.translatesAutoresizingMaskIntoConstraints = false
         activityAppraiser.topAnchor.constraint(equalTo: activityScore.bottomAnchor, constant: 8).isActive = true
         activityAppraiser.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8).isActive = true
         activityAppraiser.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -8).isActive = true
-        let appraiserBoldText  = "Avaliador: "
-        let appraiserAttrs = [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 17)]
-        let appraiserAttributedString = NSMutableAttributedString(string: appraiserBoldText, attributes: appraiserAttrs)
-        let appraiserNormalText = appraiser
-        let appraiserNormalString = NSMutableAttributedString(string: appraiserNormalText)
-        appraiserAttributedString.append(appraiserNormalString)
-        activityAppraiser.attributedText = appraiserAttributedString
+        activityAppraiser.font = UIFont(name: Font.pixel, size: 17)
+        activityAppraiser.text = "Avaliador: \(appraiser)"
         activityAppraiser.numberOfLines = 0
         
         self.addSubview(activityFeedback)
@@ -70,13 +61,8 @@ class ActivityDetailsView: UIView {
         activityFeedback.topAnchor.constraint(equalTo: activityAppraiser.bottomAnchor, constant: 8).isActive = true
         activityFeedback.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8).isActive = true
         activityFeedback.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -8).isActive = true
-        let feedbackBoldText  = "Feedback: "
-        let feedbackAttrs = [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 17)]
-        let feedbackAttributedString = NSMutableAttributedString(string: feedbackBoldText, attributes: feedbackAttrs)
-        let feedbackNormalText = feedback
-        let feedbackNormalString = NSMutableAttributedString(string: feedbackNormalText)
-        feedbackAttributedString.append(feedbackNormalString)
-        activityFeedback.attributedText = feedbackAttributedString
+        activityFeedback.font = UIFont(name: Font.pixel, size: 17)
+        activityFeedback.text = "Feedback: \(feedback)"
         activityFeedback.numberOfLines = 0
         
         self.addSubview(showActivityFile)
@@ -87,5 +73,6 @@ class ActivityDetailsView: UIView {
         showActivityFile.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -8).isActive = true
         showActivityFile.setTitle("Clique aqui para ver o Feedback", for: .normal)
         showActivityFile.setTitleColor(UIColor.red, for: .normal)
+        showActivityFile.titleLabel?.font = UIFont(name: Font.pixel, size: 17)
     }
 }

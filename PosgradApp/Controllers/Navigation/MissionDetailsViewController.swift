@@ -66,8 +66,8 @@ class MissionDetailsViewController: UIViewController {
         missionNameLabel.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 16).isActive = true
         missionNameLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16).isActive = true
         missionNameLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16).isActive = true
-        missionNameLabel.font = UIFont(name: "pixelmix", size: 24)
-        missionNameLabel.text = mission?.name?.replacingOccurrences(of: "ã", with: "a")
+        missionNameLabel.font = UIFont(name: Font.pixel, size: 24)
+        missionNameLabel.text = mission?.name
         missionNameLabel.textAlignment = .center
         missionNameLabel.numberOfLines = 0
         
@@ -78,7 +78,7 @@ class MissionDetailsViewController: UIViewController {
         scoreLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16).isActive = true
         scoreLabel.numberOfLines = 0
         scoreLabel.textAlignment = .center
-        scoreLabel.font = UIFont(name: "pixelmix", size: 20)
+        scoreLabel.font = UIFont(name: Font.pixel, size: 20)
         scoreLabel.text = "Pontuação: \(Int(totalScore!))"
         
         activityStackView.removeAll()
@@ -123,9 +123,9 @@ class MissionDetailsViewController: UIViewController {
         } else {
             missionDescriptionLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -16).isActive = true
         }
-        missionDescriptionLabel.font = UIFont(name: "pixelmix", size: 16)
+        missionDescriptionLabel.font = UIFont(name: Font.pixel, size: 16)
         missionDescriptionLabel.numberOfLines = 0
-        missionDescriptionLabel.text = mission?.description?.replacingOccurrences(of: "ã", with: "a").replacingOccurrences(of: "ç", with: "c")
+        missionDescriptionLabel.text = mission?.description
         missionDescriptionLabel.textAlignment = .justified
     }
     

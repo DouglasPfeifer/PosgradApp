@@ -24,6 +24,9 @@
 		A4559300226AA01C0051D82D /* ActivityDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45592FF226AA01C0051D82D /* ActivityDetailsView.swift */; };
 		A4559303226AD9EE0051D82D /* pixelmix.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A4559302226AD9EE0051D82D /* pixelmix.ttf */; };
 		A4559305226ADA010051D82D /* pixelmix_bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A4559304226ADA010051D82D /* pixelmix_bold.ttf */; };
+		A4559307226AED040051D82D /* Pixel-UniCode.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A4559306226AED040051D82D /* Pixel-UniCode.ttf */; };
+		A4559309226AED760051D82D /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4559308226AED760051D82D /* AppConstants.swift */; };
+		A455930B226AEE3A0051D82D /* PixelUniCode.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A455930A226AEE3A0051D82D /* PixelUniCode.ttf */; };
 		A458AF702241AD1D009DE671 /* FirestoreKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = A458AF6F2241AD1D009DE671 /* FirestoreKeys.swift */; };
 		A458AF722241B4AC009DE671 /* TeamMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = A458AF712241B4AC009DE671 /* TeamMember.swift */; };
 		A458AF742241B50F009DE671 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = A458AF732241B50F009DE671 /* Team.swift */; };
@@ -84,6 +87,9 @@
 		A45592FF226AA01C0051D82D /* ActivityDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityDetailsView.swift; sourceTree = "<group>"; };
 		A4559302226AD9EE0051D82D /* pixelmix.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = pixelmix.ttf; sourceTree = "<group>"; };
 		A4559304226ADA010051D82D /* pixelmix_bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = pixelmix_bold.ttf; sourceTree = "<group>"; };
+		A4559306226AED040051D82D /* Pixel-UniCode.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pixel-UniCode.ttf"; sourceTree = "<group>"; };
+		A4559308226AED760051D82D /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
+		A455930A226AEE3A0051D82D /* PixelUniCode.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = PixelUniCode.ttf; sourceTree = "<group>"; };
 		A458AF6F2241AD1D009DE671 /* FirestoreKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreKeys.swift; sourceTree = "<group>"; };
 		A458AF712241B4AC009DE671 /* TeamMember.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamMember.swift; sourceTree = "<group>"; };
 		A458AF732241B50F009DE671 /* Team.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
@@ -189,6 +195,8 @@
 		A4559301226AD9740051D82D /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				A455930A226AEE3A0051D82D /* PixelUniCode.ttf */,
+				A4559306226AED040051D82D /* Pixel-UniCode.ttf */,
 				A4559302226AD9EE0051D82D /* pixelmix.ttf */,
 				A4559304226ADA010051D82D /* pixelmix_bold.ttf */,
 			);
@@ -199,6 +207,7 @@
 			isa = PBXGroup;
 			children = (
 				A458AF6F2241AD1D009DE671 /* FirestoreKeys.swift */,
+				A4559308226AED760051D82D /* AppConstants.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -228,9 +237,9 @@
 		A471E7952216105A00A4FAA6 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				A45592FE226A9F9A0051D82D /* CustomUIViews */,
 				A4AA0E592238E0F00027DAEF /* TableViewCells */,
 				A4AA0E5A2238E1060027DAEF /* CollectionViewCells */,
+				A45592FE226A9F9A0051D82D /* CustomUIViews */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -460,9 +469,11 @@
 				A4CF4B1522160CAA000C120A /* LaunchScreen.storyboard in Resources */,
 				A4CF4B1222160CAA000C120A /* Assets.xcassets in Resources */,
 				A4559303226AD9EE0051D82D /* pixelmix.ttf in Resources */,
+				A4559307226AED040051D82D /* Pixel-UniCode.ttf in Resources */,
 				A4AA0E522238BCAB0027DAEF /* GoogleService-Info.plist in Resources */,
 				A4CF4B3922160CC8000C120A /* Podfile in Resources */,
 				A4CF4B1022160CAA000C120A /* Main.storyboard in Resources */,
+				A455930B226AEE3A0051D82D /* PixelUniCode.ttf in Resources */,
 				A4559305226ADA010051D82D /* pixelmix_bold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -573,6 +584,7 @@
 				A458AF702241AD1D009DE671 /* FirestoreKeys.swift in Sources */,
 				A458AF782241B7DF009DE671 /* TeamActivity.swift in Sources */,
 				A438B9B322189D8A00819F2B /* ViewControllerExtensions.swift in Sources */,
+				A4559309226AED760051D82D /* AppConstants.swift in Sources */,
 				A4BFD7C9224CB37A00BA272B /* User.swift in Sources */,
 				A45592FD226A59CE0051D82D /* SeasonSelectionTableViewCell.swift in Sources */,
 			);
