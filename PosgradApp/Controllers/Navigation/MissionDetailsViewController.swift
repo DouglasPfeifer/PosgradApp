@@ -25,15 +25,11 @@ class MissionDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.extendedLayoutIncludesOpaqueBars = true
+
         initNavigationBar()
         
         initScrollView()
-        
-        print(team)
-        print(season)
-        print(mission)
-        print(totalScore)
-        print(missionActivities)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -62,9 +58,9 @@ class MissionDetailsViewController: UIViewController {
         missionNameLabel.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 16).isActive = true
         missionNameLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16).isActive = true
         missionNameLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16).isActive = true
-        missionNameLabel.heightAnchor.constraint(equalToConstant: 35).isActive = true
-        missionNameLabel.font = UIFont.boldSystemFont(ofSize: 17)
+        missionNameLabel.font = UIFont.boldSystemFont(ofSize: 20)
         missionNameLabel.text = mission?.name
+        missionNameLabel.textAlignment = .center
         missionNameLabel.numberOfLines = 0
         
         scrollView.addSubview(scoreLabel)
@@ -72,61 +68,59 @@ class MissionDetailsViewController: UIViewController {
         scoreLabel.topAnchor.constraint(equalTo: missionNameLabel.bottomAnchor, constant: 8).isActive = true
         scoreLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16).isActive = true
         scoreLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16).isActive = true
-        scoreLabel.heightAnchor.constraint(equalToConstant: 35).isActive = true
-        scoreLabel.font = UIFont.systemFont(ofSize: 17)
         scoreLabel.numberOfLines = 0
-        let scoreBoldText  = "Pontuação total na missão: "
-        let scoreAttrs = [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 17)]
+        scoreLabel.textAlignment = .right
+        let scoreBoldText  = "Pontos"
+        let scoreAttrs = [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 16)]
         let scoreAttributedString = NSMutableAttributedString(string:scoreBoldText, attributes:scoreAttrs)
         let scoreNormalText = String(format: "%.0f", totalScore!)
         let scoreNormalString = NSMutableAttributedString(string:scoreNormalText)
         scoreAttributedString.append(scoreNormalString)
         scoreLabel.attributedText = scoreAttributedString
         
-        let newActivityView = ActivityDetailsView()
-        newActivityView.initSubviews(name: missionActivities![0].name!, type: missionActivities![0].type!, score: Double(missionActivities![0].score!), appraiser: missionActivities![0].appraiser!, feedback: missionActivities![0].feedback!)
-        scrollView.addSubview(newActivityView)
-        newActivityView.translatesAutoresizingMaskIntoConstraints = false
-        newActivityView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16).isActive = true
-        newActivityView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16).isActive = true
-        newActivityView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 0).isActive = true
-        newActivityView.backgroundColor = UIColor.white
-        newActivityView.layer.cornerRadius = 6
-        newActivityView.layer.shadowColor = UIColor.black.cgColor
-        newActivityView.layer.shadowRadius = 3
-        newActivityView.layer.shadowOpacity = 0.25
-        newActivityView.layer.shadowOffset = CGSize.zero
-        
-        /*
         activityStackView.removeAll()
         if let activities = missionActivities {
-        for (index, activity) in activities.enumerated() {
-        let newActivityView = ActivityDetailsView()
-        scrollView.addSubview(newActivityView)
-        if activityStackView.isEmpty {
-        newActivityView.topAnchor.constraint(equalTo: missionDescriptionLabel.bottomAnchor, constant: 8).isActive = true
-        newActivityView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16).isActive = true
-        newActivityView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16).isActive = true
-        } else {
-        newActivityView.topAnchor.constraint(equalTo: activityStackView.last!.bottomAnchor, constant: 8).isActive = true
-        newActivityView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16).isActive = true
-        newActivityView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16).isActive = true
+            for activity in activities {
+                let newActivityView = ActivityDetailsView()
+                
+                newActivityView.initSubviews(name: activity.name!, type: activity.type!, score: Double(activity.score!), appraiser: activity.appraiser!, feedback: activity.feedback!)
+                
+                scrollView.addSubview(newActivityView)
+                
+                newActivityView.translatesAutoresizingMaskIntoConstraints = false
+                
+                if activityStackView.isEmpty {
+                    newActivityView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16).isActive = true
+                    newActivityView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16).isActive = true
+                    newActivityView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -16).isActive = true
+                } else {
+                    newActivityView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16).isActive = true
+                    newActivityView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16).isActive = true
+                    newActivityView.bottomAnchor.constraint(equalTo: activityStackView.last!.topAnchor, constant: -8).isActive = true
+                }
+                
+                newActivityView.backgroundColor = UIColor.white
+                newActivityView.layer.cornerRadius = 6
+                newActivityView.layer.shadowColor = UIColor.black.cgColor
+                newActivityView.layer.shadowRadius = 3
+                newActivityView.layer.shadowOpacity = 0.25
+                newActivityView.layer.shadowOffset = CGSize.zero
+                
+                activityStackView.append(newActivityView)
+            }
         }
-        if missionActivities?.count == index {
-        newActivityView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor, constant: -8).isActive = true
-        }
-        newActivityView.initSubviews(name: activity.name!, type: activity.type!, score: Double(activity.score!), appraiser: activity.appraiser!, feedback: activity.feedback!)
-        activityStackView.append(newActivityView)
-        }
-        }
-        */
+        
         
         scrollView.addSubview(missionDescriptionLabel)
         missionDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         missionDescriptionLabel.topAnchor.constraint(equalTo: scoreLabel.bottomAnchor, constant: 8).isActive = true
         missionDescriptionLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16).isActive = true
         missionDescriptionLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16).isActive = true
-        missionDescriptionLabel.bottomAnchor.constraint(equalTo: newActivityView.topAnchor, constant: -8).isActive = true
+        if let lastAtivity = activityStackView.last {
+            missionDescriptionLabel.bottomAnchor.constraint(equalTo: lastAtivity.topAnchor, constant: -16).isActive = true
+        } else {
+            missionDescriptionLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -16).isActive = true
+        }
         missionDescriptionLabel.font = UIFont.systemFont(ofSize: 17)
         missionDescriptionLabel.numberOfLines = 0
         let missionBoldText  = "Descrição: "

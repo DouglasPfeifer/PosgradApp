@@ -280,7 +280,17 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                 print("Error getting documents: \(error)")
                 completion(false)
             } else {
-                var teamActivities = [TeamActivity]()
+                // Each position of the array represents one Season ([0] = 1ª Temporada, [1] = 2ª Temporada, ...) and each key in the dictionary represents one Phase (0 = Passport, 1 = Curiosity, 2 = Discovery, 3 = Startup), each value of the dictionary has an array with activities and these are the activities of the given Season and the given Phase.
+                var teamActivities = [
+                    [Int: [TeamActivity]](),
+                    [Int: [TeamActivity]](),
+                    [Int: [TeamActivity]](),
+                    [Int: [TeamActivity]](),
+                    [Int: [TeamActivity]](),
+                    [Int: [TeamActivity]](),
+                    [Int: [TeamActivity]](),
+                    [Int: [TeamActivity]]()
+                ]
                 for document in querySnapshot!.documents {
                     if let documentData = document.data() as? [String : Any] {
                         if let missionReference = documentData[TeamActivityKeys.missionKey] as? DocumentReference {
@@ -321,7 +331,6 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                             } else {
                                 newScore = 0.0
                             }
-                            //print("missionSeasonInt: ", missionSeasonInt, "missionName: ", missionName!, "newScore: ", newScore)
                             
                             team.updateScore(season: missionSeasonInt, mission: missionName!, newScore: newScore)
                             
@@ -335,8 +344,15 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                             let newTeam = documentData[TeamActivityKeys.teamKey] as? DocumentReference
                             let newType = documentData[TeamActivityKeys.typeKey] as? String
                             let newActivity = TeamActivity.init(file: newFile, appraiser: newAppraiser, feedback: newFeedback, member: newMember, mission: newMission, name: newName, score: newMissionScore, type: newType, team: newTeam, ID: document.documentID)
-                            teamActivities.append(newActivity)
-                            self.teams[team.ID!]!.activitiesBySeasonByPhase[missionSeasonInt][(missionOrder! - 1)] = teamActivities
+                            
+                            if var activityArray = teamActivities[missionSeasonInt][(missionOrder! - 1)] {
+                                activityArray.append(newActivity)
+                                teamActivities[missionSeasonInt].updateValue(activityArray, forKey: (missionOrder! - 1))
+                                self.teams[team.ID!]!.activitiesBySeasonByPhase = teamActivities
+                            } else {
+                                teamActivities[missionSeasonInt].updateValue([newActivity], forKey: (missionOrder! - 1))
+                                self.teams[team.ID!]!.activitiesBySeasonByPhase = teamActivities
+                            }
                         }
                     }
                 }
