@@ -198,14 +198,14 @@ class Chart: NSObject {
         barChartView.data = data
         
         set1.drawIconsEnabled = false
-        set1.setColor(chartBarColor, alpha: 0.5)
+        set1.setColor(chartBarColor, alpha: 0.3)
         set1.valueFont = UIFont.boldSystemFont(ofSize: 12)
         set1.valueColors = [chartValueColor as NSUIColor]
         
         for set in barChartView.data!.dataSets {
             if let set = set as? BarChartDataSet {
                 set.barBorderWidth = set.barBorderWidth == 2.0 ? 0.0 : 2.0
-                set.barBorderColor = chartBorderColor
+                set.barBorderColor = chartBorderColor.withAlphaComponent(0.5)
                 set.drawValuesEnabled = true
             }
         }
@@ -240,16 +240,16 @@ class Chart: NSObject {
     
     func initOthersTeamChart (sliderY: [String: Double]) {
         initLineChartView(chartBackgroundColor: UIColor.white,
-                          chartLineColor: UIColor.green,
+                          chartLineColor: UIColor.black,
                           chartCircleColor: UIColor.white,
-                          chartCircleHoleColor: UIColor.green,
-                          topGradientHexColor: "#434343",
+                          chartCircleHoleColor: UIColor.black,
+                          topGradientHexColor: "#000000",//"#434343",
                           bottomGradientHexColor: "#FFFFFF",
                           axisTextColor: UIColor.black,
                           leftAxisFont: .systemFont(ofSize: 11),
                           xAxisFont: .systemFont(ofSize: 11),
-                          chartBarColor: UIColor.darkGray,
-                          chartBorderColor: UIColor.green,
+                          chartBarColor: UIColor.black,
+                          chartBorderColor: UIColor.black,
                           chartValueColor: UIColor.black,
                           sliderY: sliderY)
     }

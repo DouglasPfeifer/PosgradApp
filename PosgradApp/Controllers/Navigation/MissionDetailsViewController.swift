@@ -66,7 +66,7 @@ class MissionDetailsViewController: UIViewController {
         missionNameLabel.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 16).isActive = true
         missionNameLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16).isActive = true
         missionNameLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16).isActive = true
-        missionNameLabel.font = UIFont(name: Font.pixel, size: 24)
+        missionNameLabel.font = UIFont.systemFont(ofSize: 24) //UIFont(name: Font.pixel, size: 24)
         missionNameLabel.text = mission?.name
         missionNameLabel.textAlignment = .center
         missionNameLabel.numberOfLines = 0
@@ -78,7 +78,7 @@ class MissionDetailsViewController: UIViewController {
         scoreLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16).isActive = true
         scoreLabel.numberOfLines = 0
         scoreLabel.textAlignment = .center
-        scoreLabel.font = UIFont(name: Font.pixel, size: 20)
+        scoreLabel.font = UIFont.systemFont(ofSize: 20) //UIFont(name: Font.pixel, size: 20)
         scoreLabel.text = "Pontuação: \(Int(totalScore!))"
         
         activityStackView.removeAll()
@@ -119,11 +119,11 @@ class MissionDetailsViewController: UIViewController {
         missionDescriptionLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16).isActive = true
         missionDescriptionLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16).isActive = true
         if let lastAtivity = activityStackView.last {
-            missionDescriptionLabel.bottomAnchor.constraint(equalTo: lastAtivity.topAnchor, constant: -16).isActive = true
+            missionDescriptionLabel.bottomAnchor.constraint(equalTo: lastAtivity.topAnchor, constant: -24).isActive = true
         } else {
-            missionDescriptionLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -16).isActive = true
+            missionDescriptionLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -24).isActive = true
         }
-        missionDescriptionLabel.font = UIFont(name: Font.pixel, size: 16)
+        missionDescriptionLabel.font = UIFont.systemFont(ofSize: 16) //UIFont(name: Font.pixel, size: 16)
         missionDescriptionLabel.numberOfLines = 0
         missionDescriptionLabel.text = mission?.description
         missionDescriptionLabel.textAlignment = .justified

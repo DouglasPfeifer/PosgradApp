@@ -30,8 +30,8 @@ class MainTabBarViewController: UITabBarController {
         tabBar.items?[3].selectedImage = resizeImage(image: UIImage(named: "times_inv")!, targetSize: CGSize(width: 30, height: 30))
         tabBar.items?[4].selectedImage = resizeImage(image: UIImage(named: "game")!, targetSize: CGSize(width: 30, height: 30))
 
-        self.tabBar.unselectedItemTintColor = UIColor(white: 0.9, alpha: 1.0)
-        // Do any additional setup after loading the view.
+        self.tabBar.unselectedItemTintColor = UIColor(white: 0.3, alpha: 1.0)
+        self.tabBar.tintColor = UIColor(white: 0.1, alpha: 1.0)
     }
 
     /*

@@ -22,12 +22,17 @@ class DashboardChartTableViewCell: UITableViewCell, ChartViewDelegate {
     
     var chartInView = BarLineChartViewBase()
     var indexPathRow : Int!
+    var indexesShown = [Int]()
     let failureLabel = UILabel()
     
     weak var delegate: ClassDashboardCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
+    }
+    
+    override func didChangeValue(forKey key: String) {
+        indexesShown.removeAll()
     }
     
     @IBAction func configButton(_ sender: Any) {
@@ -72,6 +77,11 @@ class DashboardChartTableViewCell: UITableViewCell, ChartViewDelegate {
         self.chartInView.bottomAnchor.constraint(equalTo: self.chartView.bottomAnchor, constant: 0).isActive = true
         self.chartInView.delegate = self
         self.chartInView.setNeedsDisplay()
+        
+        if !indexesShown.contains(indexPathRow) {
+            indexesShown.append(indexPathRow)
+            self.chartInView.animate(yAxisDuration: 1)
+        }
     }
     
     func initFailureChart (indexPathRow: Int) {
