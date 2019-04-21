@@ -223,7 +223,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                         if sliderY!.count > self.selectedSeason {
                             self.charts[0]!.initUserTeamChart(sliderY: sliderY![self.selectedSeason]!)
                         } else {
-                            print("error")
+
                         }
                     } else {
                         self.failedRequest = true
@@ -250,7 +250,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                             newChart.initOthersTeamChart(sliderY: sliderY![self.selectedSeason]!)
                             self.charts.append(newChart)
                         } else {
-                            print("error")
+
                         }
                     } else {
                         self.failedRequest = true

@@ -23,9 +23,15 @@ class MissionDetailsViewController: UIViewController {
     var missionActivities: [TeamActivity]?
     
     // Animation values
+    // Values for 0 to 100 score animation
     var scoreStartValue: Double = 0
     var scoreAnimationDuration: Double = 1.5
     var scoreAnimationStartDate = Date()
+    // Values for word by word animation
+    var missionDescriptionSecPerWord: Double = 0.025
+    var missionDescriptionLabelTextArray : [Character]?
+    var constructedMissionDescriptionString = ""
+    var lastShownMissionDescriptionLabelTextArrayIndex = -1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -125,20 +131,38 @@ class MissionDetailsViewController: UIViewController {
         }
         missionDescriptionLabel.font = UIFont.systemFont(ofSize: 16) //UIFont(name: Font.pixel, size: 16)
         missionDescriptionLabel.numberOfLines = 0
-        missionDescriptionLabel.text = mission?.description
+        // missionDescriptionLabel.text = mission?.description // For word by word animation this line needs to be commented
         missionDescriptionLabel.textAlignment = .justified
     }
-    
+
     @objc func handleUpdate () {
         let now = Date()
+        // The time in secods since the animation started
         let elapsedTime = now.timeIntervalSince(scoreAnimationStartDate)
+        // The percentage of desired time completed (0.0 = just started, 1.0 = just finished)
+        let percentage = elapsedTime / scoreAnimationDuration
         
         if elapsedTime > scoreAnimationDuration {
             self.scoreLabel.text = "Pontuação: \(Int(totalScore!))"
         } else {
-            let percentage = elapsedTime / scoreAnimationDuration
-            let value = percentage * (totalScore! - scoreStartValue)
+            // The value shown to the user (starts in "scoreStartValue", ends in "totalScore")
+            let value = scoreStartValue + percentage * (totalScore! - scoreStartValue)
             self.scoreLabel.text = "Pontuação: \(Int(value))"
+        }
+        
+        // Word by word animation
+        if let missionDescriptionString = mission?.description {
+            if missionDescriptionString.count == self.missionDescriptionLabel.text?.count {
+                self.missionDescriptionLabel.text = mission?.description
+            } else {
+                let wordIndexToShow = Int(elapsedTime/missionDescriptionSecPerWord)
+                if wordIndexToShow != lastShownMissionDescriptionLabelTextArrayIndex {
+                    lastShownMissionDescriptionLabelTextArrayIndex = wordIndexToShow
+                    
+                    constructedMissionDescriptionString = String(missionDescriptionString.prefix(lastShownMissionDescriptionLabelTextArrayIndex))
+                    missionDescriptionLabel.text = constructedMissionDescriptionString
+                }
+            }
         }
     }
 }

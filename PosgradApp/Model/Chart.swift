@@ -85,7 +85,7 @@ class Chart: NSObject {
         lineChartView.xAxis.drawGridLinesEnabled = false
         lineChartView.xAxis.labelTextColor = axisTextColor
         lineChartView.xAxis.labelFont = xAxisFont
-        lineChartView.xAxis.valueFormatter = DayAxisValueFormatter(chart: lineChartView)
+        lineChartView.xAxis.valueFormatter = MissionAxisValueFormatter(chart: lineChartView)
         
         lineChartView.backgroundColor = chartBackgroundColor
         
@@ -171,7 +171,7 @@ class Chart: NSObject {
         barChartView.xAxis.drawGridLinesEnabled = false
         barChartView.xAxis.labelTextColor = axisTextColor
         barChartView.xAxis.labelFont = xAxisFont
-        barChartView.xAxis.valueFormatter = DayAxisValueFormatter(chart: barChartView)
+        barChartView.xAxis.valueFormatter = MissionAxisValueFormatter(chart: barChartView)
         
         barChartView.backgroundColor = chartBackgroundColor
         
@@ -255,7 +255,7 @@ class Chart: NSObject {
     }
 }
 
-public class DayAxisValueFormatter: NSObject, IAxisValueFormatter {
+public class MissionAxisValueFormatter: NSObject, IAxisValueFormatter {
     weak var chart: BarLineChartViewBase?
     
     let sliderXNames = ["Passport",
