@@ -22,16 +22,39 @@ class MissionDetailsViewController: UIViewController {
     var totalScore: Double?
     var missionActivities: [TeamActivity]?
     
+    private var displayLink: CADisplayLink?
+    
     // Animation values
     // Values for 0 to 100 score animation
     var scoreStartValue: Double = 0
     var scoreAnimationDuration: Double = 1.5
-    var scoreAnimationStartDate = Date()
-    // Values for word by word animation
+    var scoreAnimationStartDate: Date?
+    
+    /*
+    // Values for letter by letter animation
     var missionDescriptionSecPerWord: Double = 0.025
-    var missionDescriptionLabelTextArray : [Character]?
     var constructedMissionDescriptionString = ""
-    var lastShownMissionDescriptionLabelTextArrayIndex = -1
+    var lastShownMissionDescriptionLabelTextIndex = -1
+    */
+    
+    /*
+    // Values for letter by letter foreground color animation
+    var missionDescriptionSecPerWord: Double = 0.25
+    var lastShownMissionDescriptionLabelTextIndex = -1
+    var missionDescriptionStringAttributes = [NSAttributedStringKey.foregroundColor : UIColor.clear]
+    var missionDescriptionAttrString : NSMutableAttributedString?
+    var lastLetterRangeToShow = -1
+    */
+    
+    /*
+    // Values for word by word color animation
+    var missionDescriptionSecPerWord: Double = 0.15
+    var missionDescriptionStringAttributes = [NSAttributedStringKey.foregroundColor : UIColor.clear]
+    var missionDescriptionAttrString : NSMutableAttributedString?
+    var missionDescriptionArrOfWords = [String]()
+    var lastShownWordIndex = 0
+    var lastWordToShowIndex: Int = -1
+    */
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,12 +65,22 @@ class MissionDetailsViewController: UIViewController {
         
         initScrollView()
         
-        let displayLink = CADisplayLink(target: self, selector: #selector(handleUpdate))
-        displayLink.add(to: .main, forMode: .defaultRunLoopMode)
+        //missionDescriptionAttrString = NSMutableAttributedString(string: mission!.description!, attributes: missionDescriptionStringAttributes)
+        //missionDescriptionArrOfWords = mission!.description!.components(separatedBy: " ")
     }
     
     override func viewDidAppear(_ animated: Bool) {
         initViewLabels()
+        scoreAnimationStartDate = Date()
+        startDisplayLink()
+        
+        UIView.animate(withDuration: 1.5, animations: {
+            self.missionDescriptionLabel.alpha = 1.0
+        })
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        stopDisplayLink()
     }
     
     func initNavigationBar () {
@@ -131,14 +164,31 @@ class MissionDetailsViewController: UIViewController {
         }
         missionDescriptionLabel.font = UIFont.systemFont(ofSize: 16) //UIFont(name: Font.pixel, size: 16)
         missionDescriptionLabel.numberOfLines = 0
-        // missionDescriptionLabel.text = mission?.description // For word by word animation this line needs to be commented
+        missionDescriptionLabel.alpha = 0 // For whole text fade in
+        missionDescriptionLabel.text = mission?.description // For whole text fade in
+        //missionDescriptionLabel.attributedText = missionDescriptionAttrString // For word by word animation this line needs to be commented
         missionDescriptionLabel.textAlignment = .justified
+    }
+    
+    func startDisplayLink() {
+        stopDisplayLink() // make sure to stop a previous running display link
+        
+        // create displayLink & add it to the run-loop
+        let displayLink = CADisplayLink(target: self, selector: #selector(handleUpdate))
+        
+        displayLink.add(to: .main, forMode: .commonModes)
+        self.displayLink = displayLink
+    }
+    
+    func stopDisplayLink() {
+        displayLink?.invalidate()
+        displayLink = nil
     }
 
     @objc func handleUpdate () {
         let now = Date()
         // The time in secods since the animation started
-        let elapsedTime = now.timeIntervalSince(scoreAnimationStartDate)
+        let elapsedTime = now.timeIntervalSince(scoreAnimationStartDate!)
         // The percentage of desired time completed (0.0 = just started, 1.0 = just finished)
         let percentage = elapsedTime / scoreAnimationDuration
         
@@ -150,19 +200,74 @@ class MissionDetailsViewController: UIViewController {
             self.scoreLabel.text = "Pontuação: \(Int(value))"
         }
         
-        // Word by word animation
+        /*
+        // Letter by letter string animation
         if let missionDescriptionString = mission?.description {
             if missionDescriptionString.count == self.missionDescriptionLabel.text?.count {
                 self.missionDescriptionLabel.text = mission?.description
             } else {
                 let wordIndexToShow = Int(elapsedTime/missionDescriptionSecPerWord)
-                if wordIndexToShow != lastShownMissionDescriptionLabelTextArrayIndex {
-                    lastShownMissionDescriptionLabelTextArrayIndex = wordIndexToShow
+                if wordIndexToShow != lastShownMissionDescriptionLabelTextIndex {
+                    lastShownMissionDescriptionLabelTextIndex = wordIndexToShow
                     
-                    constructedMissionDescriptionString = String(missionDescriptionString.prefix(lastShownMissionDescriptionLabelTextArrayIndex))
+                    constructedMissionDescriptionString = String(missionDescriptionString.prefix(lastShownMissionDescriptionLabelTextIndex))
                     missionDescriptionLabel.text = constructedMissionDescriptionString
                 }
             }
         }
+        */
+        
+        /*
+        // Letter by letter color animation
+        if let missionDescriptionString = missionDescriptionLabel.attributedText?.string {
+            let elapsedTime = now.timeIntervalSince(scoreAnimationStartDate!)
+            let wordRangeToShow = Int(elapsedTime/missionDescriptionSecPerWord)
+            if wordRangeToShow <= missionDescriptionString.count/2 {
+                if lastLetterRangeToShow != wordRangeToShow {
+                    if lastLetterRangeToShow == -1 {
+                        lastLetterRangeToShow = 0
+                    }
+                    let range = NSRange(location: lastLetterRangeToShow, length: wordRangeToShow + 1)
+                    lastLetterRangeToShow = wordRangeToShow
+
+                    self.missionDescriptionAttrString?.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.black, range: range)
+                    self.missionDescriptionLabel.attributedText = self.missionDescriptionAttrString
+                }
+            }
+        }
+        */
+        
+        /*
+        // Word by word color animation
+        if let missionDescriptionString = missionDescriptionLabel.attributedText?.string {
+            let elapsedTime = now.timeIntervalSince(scoreAnimationStartDate!)
+            let wordToShowIndex = Int(elapsedTime/missionDescriptionSecPerWord)
+            
+            if wordToShowIndex < missionDescriptionArrOfWords.count {
+                
+                if lastWordToShowIndex != wordToShowIndex {
+                    lastWordToShowIndex = wordToShowIndex
+
+                    let wordToShow = " \(missionDescriptionArrOfWords[wordToShowIndex])"
+                    var numLettersToShow = wordToShow.count
+                    if lastShownWordIndex == 0 {
+                        numLettersToShow -= 1
+                    }
+                    
+                    let range = NSRange(location: lastShownWordIndex, length: numLettersToShow)
+                    lastShownWordIndex = lastShownWordIndex + numLettersToShow
+                    
+                    self.missionDescriptionAttrString?.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.black, range: range)
+
+                    UIView.transition(with: self.missionDescriptionLabel, duration: missionDescriptionSecPerWord, options: [.transitionCrossDissolve], animations: {
+                        self.missionDescriptionLabel.attributedText = self.missionDescriptionAttrString
+                    }, completion: nil)
+                }
+            } else {
+                self.missionDescriptionAttrString = NSMutableAttributedString(string: mission!.description!, attributes: [NSAttributedStringKey.foregroundColor : UIColor.black])
+                self.missionDescriptionLabel.attributedText = self.missionDescriptionAttrString
+            }
+        }
+        */
     }
 }
