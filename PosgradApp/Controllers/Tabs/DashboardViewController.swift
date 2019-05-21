@@ -215,11 +215,57 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                         let userTeam = self.teamsOrder[0]
                         var sliderY = self.teams[userTeam]?.scoreArrayDic
                         if sliderY?.count == 0 {
-                            sliderY = [["Missão Discovery" : 0.0,
-                                        "Missão Startup" : 0.0,
-                                        "Missão Passport" : 0.0,
-                                        "Missão Curiosity" : 0.0]]
+                            sliderY = [["Missão Passport" : 0.0,
+                                        "Missão Curiosity" : 0.0,
+                                        "Missão Discovery" : 0.0,
+                                        "Missão Startup" : 0.0],
+                                       ["Missão Passport" : 0.0,
+                                        "Missão Curiosity" : 0.0,
+                                        "Missão Discovery" : 0.0,
+                                        "Missão Startup" : 0.0],
+                                       ["Missão Passport" : 0.0,
+                                        "Missão Curiosity" : 0.0,
+                                        "Missão Discovery" : 0.0,
+                                        "Missão Startup" : 0.0],
+                                       ["Missão Passport" : 0.0,
+                                        "Missão Curiosity" : 0.0,
+                                        "Missão Discovery" : 0.0,
+                                        "Missão Startup" : 0.0]]
+                        } else if sliderY?.count == 1 {
+                            if sliderY![0]!.count == 0 {
+                                sliderY![0] = ["Missão Passport" : 0.0,
+                                            "Missão Curiosity" : 0.0,
+                                            "Missão Discovery" : 0.0,
+                                            "Missão Startup" : 0.0]
+                            } else if sliderY![0]!.count == 1 {
+                                sliderY![0]!["Missão Curiosity"] = 0.0
+                                sliderY![0]!["Missão Discovery"] = 0.0
+                                sliderY![0]!["Missão Startup"] = 0.0
+                            } else if sliderY![0]!.count == 2 {
+                                sliderY![0]!["Missão Discovery"] = 0.0
+                                sliderY![0]!["Missão Startup"] = 0.0
+                            } else if sliderY![0]!.count == 3 {
+                                sliderY![0]!["Missão Startup"] = 0.0
+                            }
+                        } else if sliderY?.count == 2 {
+                            if sliderY![1]!.count == 0 {
+                                sliderY = [["Missão Passport" : 0.0,
+                                            "Missão Curiosity" : 0.0,
+                                            "Missão Discovery" : 0.0,
+                                            "Missão Startup" : 0.0]]
+                            } else if sliderY![1]!.count == 1 {
+                                sliderY![1]!["Missão Curiosity"] = 0.0
+                                sliderY![1]!["Missão Discovery"] = 0.0
+                                sliderY![1]!["Missão Startup"] = 0.0
+                            } else if sliderY![1]!.count == 2 {
+                                sliderY![1]!["Missão Discovery"] = 0.0
+                                sliderY![1]!["Missão Startup"] = 0.0
+                            } else if sliderY![1]!.count == 3 {
+                                sliderY![1]!["Missão Startup"] = 0.0
+                            }
                         }
+                        print("//////////")
+                        print("sliderY: ", sliderY)
                         if sliderY!.count > self.selectedSeason {
                             self.charts[0]!.initUserTeamChart(sliderY: sliderY![self.selectedSeason]!)
                         } else {
@@ -241,12 +287,57 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                         let nextTeam = self.teamsOrder[row]
                         var sliderY = self.teams[nextTeam]?.scoreArrayDic
                         if sliderY?.count == 0 {
-                            sliderY = [["Missão Discovery" : 0.0,
-                                        "Missão Startup" : 0.0,
-                                        "Missão Passport" : 0.0,
-                                        "Missão Curiosity" : 0.0]]
+                            sliderY = [["Missão Passport" : 0.0,
+                                        "Missão Curiosity" : 0.0,
+                                        "Missão Discovery" : 0.0,
+                                        "Missão Startup" : 0.0],
+                                       ["Missão Passport" : 0.0,
+                                        "Missão Curiosity" : 0.0,
+                                        "Missão Discovery" : 0.0,
+                                        "Missão Startup" : 0.0],
+                                       ["Missão Passport" : 0.0,
+                                        "Missão Curiosity" : 0.0,
+                                        "Missão Discovery" : 0.0,
+                                        "Missão Startup" : 0.0],
+                                       ["Missão Passport" : 0.0,
+                                        "Missão Curiosity" : 0.0,
+                                        "Missão Discovery" : 0.0,
+                                        "Missão Startup" : 0.0]]
+                        } else if sliderY?.count == 1 {
+                            if sliderY![0]!.count == 0 {
+                                sliderY![0] = ["Missão Passport" : 0.0,
+                                            "Missão Curiosity" : 0.0,
+                                            "Missão Discovery" : 0.0,
+                                            "Missão Startup" : 0.0]
+                            } else if sliderY![0]!.count == 1 {
+                                sliderY![0]!["Missão Curiosity"] = 0.0
+                                sliderY![0]!["Missão Discovery"] = 0.0
+                                sliderY![0]!["Missão Startup"] = 0.0
+                            } else if sliderY![0]!.count == 2 {
+                                sliderY![0]!["Missão Discovery"] = 0.0
+                                sliderY![0]!["Missão Startup"] = 0.0
+                            } else if sliderY![0]!.count == 3 {
+                                sliderY![0]!["Missão Startup"] = 0.0
+                            }
+                        } else if sliderY?.count == 2 {
+                            if sliderY![1]!.count == 0 {
+                                sliderY = [["Missão Passport" : 0.0,
+                                            "Missão Curiosity" : 0.0,
+                                            "Missão Discovery" : 0.0,
+                                            "Missão Startup" : 0.0]]
+                            } else if sliderY![1]!.count == 1 {
+                                sliderY![1]!["Missão Curiosity"] = 0.0
+                                sliderY![1]!["Missão Discovery"] = 0.0
+                                sliderY![1]!["Missão Startup"] = 0.0
+                            } else if sliderY![1]!.count == 2 {
+                                sliderY![1]!["Missão Discovery"] = 0.0
+                                sliderY![1]!["Missão Startup"] = 0.0
+                            } else if sliderY![1]!.count == 3 {
+                                sliderY![1]!["Missão Startup"] = 0.0
+                            }
                         }
                         if sliderY!.count > self.selectedSeason {
+                            print(sliderY)
                             newChart.initOthersTeamChart(sliderY: sliderY![self.selectedSeason]!)
                             self.charts.append(newChart)
                         } else {
@@ -298,7 +389,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                             let missionOrder = self.missions[missionReference.documentID]?.order
                             var missionSeasonInt = 0
                             if let missionSeason = self.missions[missionReference.documentID]?.season {
-                                // print(missionSeason)
+                                
                                 if let someSeason = Seasons(rawValue: missionSeason) {
                                     switch someSeason {
                                     case .season1:
@@ -317,8 +408,6 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                                         missionSeasonInt = 6
                                     case .season8:
                                         missionSeasonInt = 7
-                                    default:
-                                        missionSeasonInt = 0
                                     }
                                 } else {
                                     missionSeasonInt = 0
@@ -563,6 +652,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             cell.initLoadingCell()
             cell.selectionStyle = .none
             cell.activityIndicator.startAnimating()
+            cell.backgroundColor = UIColor.clear
             tableView.separatorStyle = .none
             return cell
         } else if self.failedRequest {
@@ -572,6 +662,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             cell.selectionStyle = .none
             cell.activityIndicator.stopAnimating()
             cell.loadingLabel.text = "Não foi possível obter os dados dos times, tente novamente mais tarde."
+            cell.backgroundColor = UIColor.clear
             tableView.separatorStyle = .none
             return cell
         } else if charts.count <= indexPath.row {

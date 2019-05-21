@@ -69,6 +69,7 @@ class DashboardChartTableViewCell: UITableViewCell, ChartViewDelegate {
         
         self.chartInView = chart.activeChart
         self.chartInView.tag = 101
+        
         self.chartView.addSubview(self.chartInView)
         self.chartInView.translatesAutoresizingMaskIntoConstraints = false
         self.chartInView.topAnchor.constraint(equalTo: self.chartView.topAnchor, constant: 0).isActive = true

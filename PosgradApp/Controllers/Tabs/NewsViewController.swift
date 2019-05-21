@@ -28,7 +28,6 @@ class NewsViewController: UIViewController, UITableViewDelegate, UITableViewData
     func initSegmentedControl () {
         segment.sizeToFit()
         segment.tintColor = UIColor.black
-        //        segment.backgroundColor = UIColor.black
         segment.selectedSegmentIndex = 0
         segment.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 15), NSAttributedStringKey.foregroundColor : UIColor.white], for: .normal)
         segment.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 15), NSAttributedStringKey.foregroundColor : UIColor.white], for: .selected)

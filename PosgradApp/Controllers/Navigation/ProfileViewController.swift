@@ -44,6 +44,10 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         initUI()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     deinit {
         // make sure to remove the observer when this view controller is dismissed/deallocated
         NotificationCenter.default.removeObserver(self)

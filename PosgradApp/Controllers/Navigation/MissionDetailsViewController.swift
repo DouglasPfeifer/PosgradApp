@@ -125,7 +125,7 @@ class MissionDetailsViewController: UIViewController {
             for activity in activities {
                 let newActivityView = ActivityDetailsView()
                 
-                newActivityView.initSubviews(name: activity.name!, type: activity.type!, score: Double(activity.score!), appraiser: activity.appraiser!, feedback: activity.feedback!)
+                newActivityView.initSubviews(name: activity.name!, type: activity.type!, score: Double(activity.score!), appraiser: activity.appraiser!, feedback: activity.feedback!, file: activity.file!)
                 
                 scrollView.addSubview(newActivityView)
                 

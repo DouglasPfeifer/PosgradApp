@@ -16,8 +16,20 @@ class ActivityDetailsView: UIView {
     let activityAppraiser = UILabel()
     let activityFeedback = UILabel()
     let showActivityFile = UIButton()
+    var fileURL: String?
     
-    func initSubviews (name: String, type: String, score: Double, appraiser: String, feedback: String) {
+    init() {
+        super.init(frame: UIScreen.main.bounds)
+        return
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func initSubviews (name: String, type: String, score: Double, appraiser: String, feedback: String, file: String) {
+        self.fileURL = file
+        
         self.addSubview(activityType)
         activityType.translatesAutoresizingMaskIntoConstraints = false
         activityType.topAnchor.constraint(equalTo: self.topAnchor, constant: 8).isActive = true
@@ -74,5 +86,18 @@ class ActivityDetailsView: UIView {
         showActivityFile.setTitle("Clique aqui para ver o Feedback", for: .normal)
         showActivityFile.setTitleColor(UIColor.red, for: .normal)
         showActivityFile.titleLabel?.font = UIFont.systemFont(ofSize: 17) //UIFont(name: Font.pixel, size: 17)
+        showActivityFile.addTarget(self, action: #selector(openFeedback), for: .touchUpInside)
+    }
+    
+    @objc func openFeedback() {
+        guard let url = URL(string: fileURL!) else {
+            return
+        }
+        
+        if #available(iOS 10.0, *) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        } else {
+            UIApplication.shared.openURL(url)
+        }
     }
 }

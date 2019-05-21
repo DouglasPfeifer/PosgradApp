@@ -61,3 +61,17 @@ struct TeamActivityKeys {
     static let teamKey = "time"
     static let typeKey = "tipo"
 }
+
+struct SelfServiceKeys {
+    static let collectionKey = "meta-info"
+    static let adminsKey = "admins"
+    static let coursesKey = "cursos"
+    struct coursesKeys {
+        static let cicles = "ciclos"
+        static let description = "desc"
+        static let emphasis = "enfases"
+        static let image = "img"
+        static let missions = "missoes"
+        static let seasons = "temporadas"
+    }
+}

@@ -90,11 +90,16 @@ class Chart: NSObject {
         lineChartView.backgroundColor = chartBackgroundColor
         
         var maxY = 0.0
+        print(sliderY)
         let values = (0..<sliderX).map { (i) -> ChartDataEntry in
-            if maxY < sliderY[DefaultMissions.order[i]]! {
-                maxY = sliderY[DefaultMissions.order[i]]!
+            if let iSliderY = sliderY[DefaultMissions.order[i]] {
+                if maxY < iSliderY {
+                    maxY = iSliderY
+                }
+                return ChartDataEntry(x: Double(i), y: sliderY[DefaultMissions.order[i]]!, icon: nil)
+            } else {
+                return ChartDataEntry(x: Double(i), y: 0.0, icon: nil)
             }
-            return ChartDataEntry(x: Double(i), y: sliderY[DefaultMissions.order[i]]!, icon: nil)
         }
         // This prevents the first letter of the first mission to be cut off, havin a 3 digit (100) axisMaximum, increases the size of the leftAxis
         if maxY == 0 {
