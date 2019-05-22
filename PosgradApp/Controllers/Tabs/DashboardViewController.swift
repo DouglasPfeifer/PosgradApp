@@ -790,9 +790,9 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     // MARK: - Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "dashboardToMissionDetails" {
-            let backItem = UIBarButtonItem()
-            backItem.title = ""
-            navigationItem.backBarButtonItem = backItem
+//            let backItem = UIBarButtonItem()
+//            backItem.title = ""
+//            navigationItem.backBarButtonItem = backItem
             
             let destinationVC = segue.destination as! MissionDetailsViewController
             

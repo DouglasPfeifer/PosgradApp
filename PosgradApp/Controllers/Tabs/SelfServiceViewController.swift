@@ -9,31 +9,70 @@
 import UIKit
 import Firebase
 
-class SelfServiceViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class SelfServiceViewController: UIViewController, UIScrollViewDelegate, ClassSelfServiceCellDelegate {
     
-    @IBOutlet weak var selfServiceCollectionView: UICollectionView!
+    var scrollView = UIScrollView()
+    var courseImageView = UIImageView()
+    var ciclesStackView = [UIView]()
     
     let segment: UISegmentedControl = UISegmentedControl(items: ["DSS-BI", "ESPGTI"])
     
-    var database: Firestore!
+    var database : Firestore!
+    var storage : Storage?
+    var storageRef : StorageReference?
+    
+    var courses = [Course]()
+    
+    var segueEmphasis : String?
+    var segueCicle : Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        initFirebase()
-        
-        selfServiceCollectionView.delegate = self
-        selfServiceCollectionView.dataSource = self
         
         self.extendedLayoutIncludesOpaqueBars = true
         
+        scrollView.delegate = self
+        scrollView.isScrollEnabled = true
+        
+        initFirebase()
+        initScrollView()
+        
         retrieveSelfServiceData(completion: {
             (completed) in
+            if completed {
+                self.initSegmentedControl()
+                self.setCourseImageView()
+                self.setCourseCiclesView()
+            } else {
+                
+            }
         })
-        initSegmentedControl()
     }
     
+//    override func viewWillAppear(_ animated: Bool) {
+//        let subViews = self.scrollView.subviews
+//        for subview in subViews{
+//            subview.removeFromSuperview()
+//        }
+//    }
+//
+//    override func viewDidAppear(_ animated: Bool) {
+//        retrieveSelfServiceData(completion: {
+//            (completed) in
+//            if completed {
+//                self.initSegmentedControl()
+//                self.setCourseImageView()
+//                self.setCourseCiclesView()
+//            } else {
+//
+//            }
+//        })
+//    }
+    
     func initFirebase () {
+        storage = Storage.storage()
+        storageRef = storage!.reference()
+        
         database = Firestore.firestore()
         let settings = database.settings
         settings.areTimestampsInSnapshotsEnabled = true
@@ -41,93 +80,156 @@ class SelfServiceViewController: UIViewController, UICollectionViewDelegate, UIC
     }
     
     func initSegmentedControl () {
-        segment.sizeToFit()
-        segment.tintColor = UIColor.black
-        segment.selectedSegmentIndex = 0
-        segment.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 15), NSAttributedStringKey.foregroundColor : UIColor.white], for: .normal)
-        segment.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 15), NSAttributedStringKey.foregroundColor : UIColor.white], for: .selected)
+        for (index, course) in self.courses.enumerated() {
+            self.segment.setTitle(course.description!, forSegmentAt: index)
+        }
+        self.segment.sizeToFit()
+        self.segment.tintColor = UIColor.black
+        self.segment.selectedSegmentIndex = 0
+        self.segment.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 15), NSAttributedStringKey.foregroundColor : UIColor.white], for: .normal)
+        self.segment.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 15), NSAttributedStringKey.foregroundColor : UIColor.white], for: .selected)
         
-        segment.addTarget(self, action: #selector(self.segmentChanged), for: .valueChanged)
+        self.segment.addTarget(self, action: #selector(self.segmentChanged), for: .valueChanged)
         
-        self.navigationItem.titleView = segment
+        self.navigationItem.titleView = self.segment
+    }
+    
+    func initScrollView () {
+        self.view.addSubview(self.scrollView)
+        self.scrollView.translatesAutoresizingMaskIntoConstraints = false
+        self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+        self.scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        self.scrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
+        self.scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+    }
+    
+    func setCourseImageView () {
+        self.scrollView.addSubview(self.courseImageView)
+        self.courseImageView.translatesAutoresizingMaskIntoConstraints = false
+        self.courseImageView.topAnchor.constraint(equalTo: self.scrollView.topAnchor, constant: 16).isActive = true
+        self.courseImageView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16).isActive = true
+        self.courseImageView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16).isActive = true
+        self.courseImageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        self.courseImageView.contentMode = .scaleAspectFit
+        
+        if segment.titleForSegment(at: segment.selectedSegmentIndex) == "DSS-BI" {
+            self.courseImageView.image = UIImage(named: "DSSBI")
+        } else if segment.titleForSegment(at: segment.selectedSegmentIndex) == "ESPGTI" {
+            self.courseImageView.image = UIImage(named: "ESPGTI")
+        }
+        
+        let imageURL = self.courses[self.segment.selectedSegmentIndex].image!
+        let httpsReference = self.storage!.reference(forURL: imageURL)
+        httpsReference.getData(maxSize: 1 * 1024 * 1024) { data, error in
+            if let error = error {
+                print(error)
+            } else {
+                let image = UIImage(data: data!)
+                self.courseImageView.image = image
+            }
+        }
+    }
+    
+    func setCourseCiclesView () {
+        self.ciclesStackView.removeAll()
+        for index in 1...self.courses[self.segment.selectedSegmentIndex].cicles! {
+            let newCicleView = SelfServiceCourseCicleView()
+            
+            newCicleView.initSubviews(cicle: index, emphases: self.courses[self.segment.selectedSegmentIndex].emphasis!)
+            
+            scrollView.addSubview(newCicleView)
+            
+            newCicleView.translatesAutoresizingMaskIntoConstraints = false
+            
+            if ciclesStackView.isEmpty {
+                newCicleView.topAnchor.constraint(equalTo: self.courseImageView.bottomAnchor, constant: 16).isActive = true
+                newCicleView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16).isActive = true
+                newCicleView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16).isActive = true
+                newCicleView.heightAnchor.constraint(equalToConstant: 180).isActive = true
+                //newCicleView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -16).isActive = true
+            } else if index != self.courses[self.segment.selectedSegmentIndex].cicles {
+                newCicleView.topAnchor.constraint(equalTo: self.ciclesStackView.last!.bottomAnchor, constant: 8).isActive = true
+                newCicleView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16).isActive = true
+                newCicleView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16).isActive = true
+                newCicleView.heightAnchor.constraint(equalToConstant: 180).isActive = true
+            } else {
+                newCicleView.topAnchor.constraint(equalTo: self.ciclesStackView.last!.bottomAnchor, constant: 8).isActive = true
+                newCicleView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16).isActive = true
+                newCicleView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16).isActive = true
+                newCicleView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor, constant: -16).isActive = true
+                newCicleView.heightAnchor.constraint(equalToConstant: 180).isActive = true
+            }
+            
+            newCicleView.backgroundColor = UIColor.white
+            newCicleView.layer.cornerRadius = 6
+            newCicleView.layer.shadowColor = UIColor.black.cgColor
+            newCicleView.layer.shadowRadius = 3
+            newCicleView.layer.shadowOpacity = 0.25
+            newCicleView.layer.shadowOffset = CGSize.zero
+            
+            newCicleView.delegate = self
+            
+            ciclesStackView.append(newCicleView)
+        }
     }
     
     @objc func segmentChanged(sender: UISegmentedControl) {
-        self.selfServiceCollectionView.reloadData()
-    }
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let collectionViewWidth = self.selfServiceCollectionView.frame.width
-        return CGSize(width: (collectionViewWidth/2 - 24), height: (collectionViewWidth/2 - 24))
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "selfServiceCell", for: indexPath) as! SelfServiceCollectionViewCell
+        let subViews = self.scrollView.subviews
+        for subview in subViews{
+            subview.removeFromSuperview()
+        }
         
-        cell.initLabels(image: UIImage(named: "paper-plane")!, description: "Descrição de teste um pouco maior que o normal", type: "PDF")
-        return cell
+        retrieveSelfServiceData(completion: {
+            (completed) in
+            if completed {
+                self.setCourseImageView()
+                self.setCourseCiclesView()
+            } else {
+                
+            }
+        })
     }
-
+    
     func retrieveSelfServiceData (completion: @escaping (Bool) -> ()) {
         database.collection(SelfServiceKeys.collectionKey).getDocuments { (querySnapshot, error) in
             if let error = error {
                 print("Error getting documents: \(error)")
                 completion(false)
             } else {
+                self.courses.removeAll()
                 for document in querySnapshot!.documents {
-                    print(document)
                     if let documentData = document.data() as? [String : Any] {
-                        let admins = documentData[SelfServiceKeys.adminsKey] as? [String]
-                        let newName = documentData[MissionKeys.nameKey] as? String
-                        var newOrder = documentData[MissionKeys.orderKey] as? Int
-                        if newOrder == nil {
-                            if let newOrderString = documentData[MissionKeys.orderKey] as? String {
-                                newOrder = Int(newOrderString)
-                            }
+                        let newAdmins = documentData[SelfServiceKeys.adminsKey] as? [String]
+                        let newCourses = documentData[SelfServiceKeys.coursesKey] as? [Any]
+                        for course in newCourses! {
+                            let dictCourse = course as! [String: Any]
+                            let newCicles = dictCourse[SelfServiceKeys.CoursesKeys.cicles] as? Int
+                            let newDescription = dictCourse[SelfServiceKeys.CoursesKeys.description] as? String
+                            let newEmphasis = dictCourse[SelfServiceKeys.CoursesKeys.emphasis] as? [String]
+                            let newImage = dictCourse[SelfServiceKeys.CoursesKeys.image] as? String
+                            let newMissions = dictCourse[SelfServiceKeys.CoursesKeys.missions] as? Int
+                            let newSeasons = dictCourse[SelfServiceKeys.CoursesKeys.seasons] as? Int
+                            self.courses.append(Course(cicles: newCicles, description: newDescription, emphasis: newEmphasis, image: newImage, missions: newMissions, seasons: newSeasons))
                         }
-                        let newSeason = documentData[MissionKeys.seasonKey] as? DocumentReference
-                        let seasonName = newSeason?.documentID
-                        var seasonInt = 0
-                        if let someSeason = Seasons(rawValue: seasonName!) {
-                            switch someSeason {
-                            case .season1:
-                                seasonInt = 0
-                            case .season2:
-                                seasonInt = 1
-                            case .season3:
-                                seasonInt = 2
-                            case .season4:
-                                seasonInt = 3
-                            case .season5:
-                                seasonInt = 4
-                            case .season6:
-                                seasonInt = 5
-                            case .season7:
-                                seasonInt = 6
-                            case .season8:
-                                seasonInt = 7
-                            default:
-                                seasonInt = 0
-                            }
-                        } else {
-                            seasonInt = 0
-                        }
-                        
-                        // print("seasonName: ", seasonName, "missionSeasonInt: ", seasonInt, "missionName: ", newName!)
-                        
-                        let newMission = Mission(description: newDescription, name: newName, order: newOrder, season: seasonName, ID: document.documentID)
-                        self.missions[document.documentID] = newMission
-                        self.missionsOrder[seasonInt][newOrder! - 1] = document.documentID
                     }
                 }
                 completion(true)
             }
+        }
+    }
+    
+    func segueToEmphasis(cicle: Int, emphasis: String) {
+        self.segueCicle = cicle
+        self.segueEmphasis = emphasis
+        performSegue(withIdentifier: "selfServiceToEmphasis", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "selfServiceToEmphasis" {
+            let destinationVC = segue.destination as! EmphasisViewController
+            destinationVC.selectedCicle = segueCicle
+            destinationVC.selectedEmphasis = segueEmphasis
+            destinationVC.selectedCourse = self.segment.titleForSegment(at: segment.selectedSegmentIndex)
         }
     }
 }

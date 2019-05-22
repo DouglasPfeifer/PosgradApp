@@ -66,12 +66,28 @@ struct SelfServiceKeys {
     static let collectionKey = "meta-info"
     static let adminsKey = "admins"
     static let coursesKey = "cursos"
-    struct coursesKeys {
+    struct CoursesKeys {
         static let cicles = "ciclos"
         static let description = "desc"
         static let emphasis = "enfases"
         static let image = "img"
         static let missions = "missoes"
         static let seasons = "temporadas"
+    }
+}
+
+struct SubjectsKeys {
+    static let collectionKey = "self"
+    static let learningObjectKey = "arrayObjAprendizagem"
+    static let cicleKey = "ciclo"
+    static let emphasis = "enfase"
+    static let formation = "formacao"
+    static let image = "img"
+    static let name = "nome"
+    struct LearningObjectKeys {
+        static let format = "formato"
+        static let link = "link"
+        static let name = "nome"
+        static let type = "tipo"
     }
 }
