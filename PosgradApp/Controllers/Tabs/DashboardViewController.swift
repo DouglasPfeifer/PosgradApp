@@ -264,8 +264,6 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                                 sliderY![1]!["Missão Startup"] = 0.0
                             }
                         }
-                        print("//////////")
-                        print("sliderY: ", sliderY)
                         if sliderY!.count > self.selectedSeason {
                             self.charts[0]!.initUserTeamChart(sliderY: sliderY![self.selectedSeason]!)
                         } else {
@@ -337,7 +335,6 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                             }
                         }
                         if sliderY!.count > self.selectedSeason {
-                            print(sliderY)
                             newChart.initOthersTeamChart(sliderY: sliderY![self.selectedSeason]!)
                             self.charts.append(newChart)
                         } else {
@@ -420,7 +417,6 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                             } else {
                                 newScore = 0.0
                             }
-                            
                             team.updateScore(season: missionSeasonInt, mission: missionName!, newScore: newScore)
                             
                             let newFile = documentData[TeamActivityKeys.fileKey] as? String

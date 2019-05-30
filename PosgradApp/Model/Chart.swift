@@ -90,7 +90,6 @@ class Chart: NSObject {
         lineChartView.backgroundColor = chartBackgroundColor
         
         var maxY = 0.0
-        print(sliderY)
         let values = (0..<sliderX).map { (i) -> ChartDataEntry in
             if let iSliderY = sliderY[DefaultMissions.order[i]] {
                 if maxY < iSliderY {

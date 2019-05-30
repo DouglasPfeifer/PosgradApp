@@ -60,7 +60,14 @@ class Team {
             }
         } else {
             let newElement = [mission : newScore]
-            self.scoreArrayDic.append(newElement)
+            if scoreArrayDic.count != season {
+                if scoreArrayDic.count <= season {
+                    for index in scoreArrayDic.count...(season - 1) {
+                        print("index: ", index)
+                        self.scoreArrayDic.append([String: Double]())
+                    }
+                }
+            }
         }
     }
 }
