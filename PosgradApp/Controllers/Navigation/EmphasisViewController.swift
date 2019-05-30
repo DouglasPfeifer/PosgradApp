@@ -22,6 +22,8 @@ class EmphasisViewController: UIViewController, UICollectionViewDelegate, UIColl
     var subjects = [Subject]()
     var selectedSubject : Int?
     
+    var firstCollectionViewLoad = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -57,6 +59,34 @@ class EmphasisViewController: UIViewController, UICollectionViewDelegate, UIColl
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let collectionViewWidth = self.subjectsColectionView.frame.width
         return CGSize(width: (collectionViewWidth/2 - 24), height: (collectionViewWidth/2 - 24))
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        if firstCollectionViewLoad {
+            firstCollectionViewLoad = false
+            let loadingLabel = UILabel(frame: CGRect(x: 0, y: 0, width: subjectsColectionView.bounds.size.width, height: subjectsColectionView.bounds.size.height))
+            loadingLabel.text = "Carregando..."
+            loadingLabel.textColor = UIColor.gray
+            loadingLabel.textAlignment = .center
+            loadingLabel.numberOfLines = 0
+            loadingLabel.font = UIFont.systemFont(ofSize: 18)
+            subjectsColectionView.backgroundView = loadingLabel
+            return 0
+        } else {
+            if subjects.count == 0 {
+                let noDataLabel = UILabel(frame: CGRect(x: 0, y: 0, width: subjectsColectionView.bounds.size.width, height: subjectsColectionView.bounds.size.height))
+                noDataLabel.text = "Sem informações."
+                noDataLabel.textColor = UIColor.gray
+                noDataLabel.textAlignment = .center
+                noDataLabel.numberOfLines = 0
+                noDataLabel.font = UIFont.systemFont(ofSize: 18)
+                subjectsColectionView.backgroundView = noDataLabel
+                return 0
+            } else {
+                subjectsColectionView.backgroundView = nil
+                return 1
+            }
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
