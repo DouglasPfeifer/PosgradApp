@@ -76,6 +76,43 @@ class SubjectViewController: UIViewController, UITableViewDelegate, UITableViewD
         return 60
     }
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        var numOfSections: Int = 0
+        if segment.titleForSegment(at: segment.selectedSegmentIndex) == "Conteúdos" {
+            if contents.count != 0 {
+                tableView.separatorStyle = .singleLine
+                numOfSections = 1
+                tableView.backgroundView = nil
+            } else {
+                let noDataLabel = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: tableView.bounds.size.height))
+                noDataLabel.text = "Sem Conteúdos."
+                noDataLabel.textColor = UIColor.gray
+                noDataLabel.textAlignment = .center
+                noDataLabel.numberOfLines = 0
+                noDataLabel.font = UIFont.systemFont(ofSize: 18)
+                tableView.backgroundView = noDataLabel
+                tableView.separatorStyle = .none
+            }
+        } else if segment.titleForSegment(at: segment.selectedSegmentIndex) == "Atividades" {
+            if activities.count != 0 {
+                tableView.separatorStyle = .singleLine
+                numOfSections = 1
+                tableView.backgroundView = nil
+            } else {
+                let noDataLabel = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: tableView.bounds.size.height))
+                noDataLabel.text = "Sem atividades."
+                noDataLabel.textColor = UIColor.gray
+                noDataLabel.textAlignment = .center
+                noDataLabel.numberOfLines = 0
+                noDataLabel.font = UIFont.systemFont(ofSize: 18)
+                tableView.backgroundView = noDataLabel
+                tableView.separatorStyle = .none
+            }
+        }
+        
+        return numOfSections
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if segment.titleForSegment(at: segment.selectedSegmentIndex) == "Conteúdos" {
             return contents.count
@@ -87,15 +124,29 @@ class SubjectViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "subjectCell", for: indexPath) as! SubjectTableViewCell
         if segment.titleForSegment(at: segment.selectedSegmentIndex) == "Conteúdos" {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "subjectCell", for: indexPath) as! SubjectTableViewCell
-            cell.contentTitle.text = contents[indexPath.row].name
-            cell.contentImageView.image = UIImage(named: "noimage")
+            if contents[indexPath.row].format == "pdf" {
+                cell.contentImageView.image = UIImage(named: "pdf")
+            } else if contents[indexPath.row].format == "video" {
+                cell.contentImageView.image = UIImage(named: "youtube")
+            } else {
+                cell.contentImageView.image = UIImage(named: "noimage")
+            }
             cell.contentImageView.contentMode = .scaleAspectFit
+            cell.contentTitle.text = contents[indexPath.row].name
+            return cell
+        } else if segment.titleForSegment(at: segment.selectedSegmentIndex) == "Atividades" {
+            if activities[indexPath.row].format == "pdf" {
+                cell.contentImageView.image = UIImage(named: "pdf")
+            } else if activities[indexPath.row].format == "video" {
+                cell.contentImageView.image = UIImage(named: "youtube")
+            } else {
+                cell.contentImageView.image = UIImage(named: "noimage")
+            }
+            cell.contentTitle.text = activities[indexPath.row].name
             return cell
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "subjectCell", for: indexPath) as! SubjectTableViewCell
-            cell.contentTitle.text = activities[indexPath.row].name
             return cell
         }
     }

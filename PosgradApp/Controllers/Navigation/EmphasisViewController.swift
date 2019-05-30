@@ -65,9 +65,15 @@ class EmphasisViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "subjectCell", for: indexPath) as! SubjectCollectionViewCell
-        cell.subjectImageView.image = UIImage(named: "noimage")
+        if let imageURL = subjects[indexPath.row].image {
+            cell.subjectImageView.downloaded(from: imageURL)
+        } else {
+            cell.subjectImageView.image = UIImage(named: "noimage")
+        }
         cell.subjectImageView.contentMode = .scaleAspectFit
         cell.sucjectTItleLabel.text = subjects[indexPath.row].name
+        cell.layer.borderWidth = 1
+        cell.layer.borderColor = UIColor.lightGray.cgColor
         return cell
     }
     
@@ -78,7 +84,6 @@ class EmphasisViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     func retrieveSubjectsByCourseCicleEmphasis (completion: @escaping (Bool) -> ()) {
         let cicleFirestoreString = String(format: "Ciclo %d", (self.selectedCicle! + 1))
-        print(cicleFirestoreString)
         database.collection(SubjectsKeys.collectionKey).whereField(SubjectsKeys.formation, isEqualTo: self.selectedCourse!).whereField(SubjectsKeys.cicleKey, isEqualTo: cicleFirestoreString).whereField(SubjectsKeys.emphasis, isEqualTo: self.selectedEmphasis!).getDocuments { (querySnapshot, error) in
             if let error = error {
                 print("Error getting documents: \(error)")

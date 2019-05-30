@@ -111,23 +111,9 @@ class SelfServiceViewController: UIViewController, UIScrollViewDelegate, ClassSe
         self.courseImageView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16).isActive = true
         self.courseImageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         self.courseImageView.contentMode = .scaleAspectFit
-        
-        if segment.titleForSegment(at: segment.selectedSegmentIndex) == "DSS-BI" {
-            self.courseImageView.image = UIImage(named: "DSSBI")
-        } else if segment.titleForSegment(at: segment.selectedSegmentIndex) == "ESPGTI" {
-            self.courseImageView.image = UIImage(named: "ESPGTI")
-        }
-        
+        self.courseImageView.image = nil
         let imageURL = self.courses[self.segment.selectedSegmentIndex].image!
-        let httpsReference = self.storage!.reference(forURL: imageURL)
-        httpsReference.getData(maxSize: 1 * 1024 * 1024) { data, error in
-            if let error = error {
-                print(error)
-            } else {
-                let image = UIImage(data: data!)
-                self.courseImageView.image = image
-            }
-        }
+        self.courseImageView.downloaded(from: imageURL)
     }
     
     func setCourseCiclesView () {

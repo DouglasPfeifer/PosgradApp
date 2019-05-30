@@ -11,6 +11,7 @@
 		A42E1F5C221B4987001D4229 /* SelfServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42E1F5B221B4987001D4229 /* SelfServiceViewController.swift */; };
 		A42E1F60221B5FA2001D4229 /* TimesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42E1F5F221B5FA2001D4229 /* TimesCollectionViewCell.swift */; };
 		A42E1F64221B605E001D4229 /* TimesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42E1F63221B605E001D4229 /* TimesViewController.swift */; };
+		A4327CD822A0149B0075436C /* UIImageViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4327CD722A0149B0075436C /* UIImageViewExtension.swift */; };
 		A438B9AE22185A3F00819F2B /* Chart.swift in Sources */ = {isa = PBXBuildFile; fileRef = A438B9AD22185A3F00819F2B /* Chart.swift */; };
 		A438B9B02218950E00819F2B /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A438B9AF2218950E00819F2B /* MainTabBarViewController.swift */; };
 		A438B9B322189D8A00819F2B /* ViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A438B9B222189D8A00819F2B /* ViewControllerExtensions.swift */; };
@@ -79,6 +80,7 @@
 		A42E1F5B221B4987001D4229 /* SelfServiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfServiceViewController.swift; sourceTree = "<group>"; };
 		A42E1F5F221B5FA2001D4229 /* TimesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesCollectionViewCell.swift; sourceTree = "<group>"; };
 		A42E1F63221B605E001D4229 /* TimesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesViewController.swift; sourceTree = "<group>"; };
+		A4327CD722A0149B0075436C /* UIImageViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewExtension.swift; sourceTree = "<group>"; };
 		A438B9AD22185A3F00819F2B /* Chart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chart.swift; sourceTree = "<group>"; };
 		A438B9AF2218950E00819F2B /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		A438B9B222189D8A00819F2B /* ViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerExtensions.swift; sourceTree = "<group>"; };
@@ -193,6 +195,7 @@
 			children = (
 				A438B9B222189D8A00819F2B /* ViewControllerExtensions.swift */,
 				A438B9B422189DD000819F2B /* UIImageExtensions.swift */,
+				A4327CD722A0149B0075436C /* UIImageViewExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -580,6 +583,7 @@
 				A438B9AE22185A3F00819F2B /* Chart.swift in Sources */,
 				A45592FB226A57B20051D82D /* SeasonSelectionTableViewController.swift in Sources */,
 				A4559300226AA01C0051D82D /* ActivityDetailsView.swift in Sources */,
+				A4327CD822A0149B0075436C /* UIImageViewExtension.swift in Sources */,
 				A4AA0E5D2238E7590027DAEF /* MissionDetailsViewController.swift in Sources */,
 				A471E7972216108400A4FAA6 /* DashboardChartTableViewCell.swift in Sources */,
 				A4CF4B0B22160CAA000C120A /* AppDelegate.swift in Sources */,
