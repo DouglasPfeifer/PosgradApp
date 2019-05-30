@@ -68,6 +68,7 @@ class Team {
                     }
                 }
             }
+            self.scoreArrayDic.append(newElement)
         }
     }
 }
