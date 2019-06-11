@@ -13,13 +13,18 @@ class TimesCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var timeImageView: UIImageView!
     @IBOutlet weak var descriptionLabel: UILabel!
     
-    func initLabels(image: UIImage, description: String) {
-        self.timeImageView.image = image.withRenderingMode(.alwaysTemplate)
-        self.timeImageView.tintColor = UIColor.orange
+    func initLabels(imageURL: String?, description: String) {
+        timeImageView.image = nil
+        if let url = imageURL {
+            timeImageView.downloaded(from: url)
+        } else {
+            timeImageView.image = UIImage(named: "paper-plane")?.withRenderingMode(.alwaysTemplate)
+            timeImageView.tintColor = UIColor.orange
+        }
         
         self.descriptionLabel.text = description
         
-        self.layer.borderWidth = 4
+        self.layer.borderWidth = 1
         self.layer.borderColor = UIColor.lightGray.cgColor
     }
 }

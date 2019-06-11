@@ -53,7 +53,7 @@ class TimesViewController: UIViewController, UICollectionViewDelegate, UICollect
                 
                 for document in querySnapshot!.documents {
                     if let documentData = document.data() as? [String : Any] {
-                        let newAvatar = documentData[TeamKeys.avatarKey] as? DocumentReference
+                        let newAvatar = documentData[TeamKeys.avatarKey] as? String
                         let ID = document.documentID
                         let reference = document.reference
                         let newTeam = Team.init(reference: reference, avatar: newAvatar, ID: ID)
@@ -79,7 +79,7 @@ class TimesViewController: UIViewController, UICollectionViewDelegate, UICollect
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "timesCell", for: indexPath) as! TimesCollectionViewCell
         
-        cell.initLabels(image: UIImage(named: "paper-plane")!, description: teams[indexPath.row].ID!)
+        cell.initLabels(imageURL: teams[indexPath.item].avatar, description: teams[indexPath.item].ID!)
         
         return cell
     }

@@ -15,8 +15,9 @@ struct TeamMember {
     var teamID : DocumentReference?
     var name : String?
     var ID : String?
+    var avatar : String?
     
-    init (course: String?, email: String?, teamID: DocumentReference?, name: String?, ID: String?) {
+    init (course: String?, email: String?, teamID: DocumentReference?, name: String?, ID: String?, avatar: String?) {
         if let newCourse = course {
             self.course = newCourse
         }
@@ -31,6 +32,9 @@ struct TeamMember {
         }
         if let newID = ID {
             self.ID = newID
+        }
+        if let newAvatar = avatar {
+            self.avatar = newAvatar
         }
     }
 }

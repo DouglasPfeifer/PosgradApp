@@ -11,7 +11,7 @@ import Firebase
 
 class Team {
     var reference : DocumentReference?
-    var avatar : DocumentReference?
+    var avatar : String?
     var ID : String? // Also is the name
     // Each position of the array represents one Season ([0] = 1ª Temporada, [1] = 2ª Temporada, ...) and each key in the dictionary represents one Phase (0 = Passport, 1 = Curiosity, 2 = Discovery, 3 = Startup), each value of the dictionary has an array with activities and these are the activities of the given Season and the given Phase.
     var activitiesBySeasonByPhase = [
@@ -28,7 +28,7 @@ class Team {
     // Each position represents one Season ([0] = 1ª Temporada, [1] = 2ª Temporada, ...) and each dictionary has a mission with its score ["discovery" : 10]
     var scoreArrayDic = [[String: Double]?]()
     
-    init(reference: DocumentReference?, avatar: DocumentReference?, ID: String?) {
+    init(reference: DocumentReference?, avatar: String?, ID: String?) {
         if let newAvatar = avatar {
             self.avatar = newAvatar
         } else {

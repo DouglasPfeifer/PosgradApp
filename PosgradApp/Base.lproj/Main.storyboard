@@ -243,7 +243,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1EC-Nw-gqV">
-                                                    <rect key="frame" x="8" y="36" width="134" height="30"/>
+                                                    <rect key="frame" x="8" y="36" width="134" height="69.5"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="LCd-M9-eQk">
                                                     <rect key="frame" x="8" y="113.5" width="134" height="20.5"/>
@@ -260,8 +260,7 @@
                                             <constraint firstAttribute="trailingMargin" secondItem="LCd-M9-eQk" secondAttribute="trailing" id="OR0-Dn-Dah"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="1EC-Nw-gqV" secondAttribute="trailing" id="VNR-tL-QtD"/>
                                             <constraint firstAttribute="bottomMargin" secondItem="LCd-M9-eQk" secondAttribute="bottom" constant="8" id="eRb-4o-Bbr"/>
-                                            <constraint firstItem="1EC-Nw-gqV" firstAttribute="height" secondItem="wT2-dJ-beJ" secondAttribute="height" multiplier="0.2" id="kSE-lh-kn7"/>
-                                            <constraint firstItem="LCd-M9-eQk" firstAttribute="top" relation="greaterThanOrEqual" secondItem="1EC-Nw-gqV" secondAttribute="bottom" constant="16" id="s5X-My-99X"/>
+                                            <constraint firstItem="LCd-M9-eQk" firstAttribute="top" secondItem="1EC-Nw-gqV" secondAttribute="bottom" constant="8" id="s5X-My-99X"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="descriptionLabel" destination="LCd-M9-eQk" id="ZOq-tH-cDT"/>
@@ -428,7 +427,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="rCJ-0F-grr">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="408"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="457"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="notificationCell" rowHeight="91" id="nLb-x0-SGC" customClass="NotificationsTableViewCell" customModule="PosgradApp" customModuleProvider="target">
@@ -952,9 +951,7 @@
                     <connections>
                         <segue destination="3mx-76-oaA" kind="relationship" relationship="viewControllers" id="F2Q-pP-QwA"/>
                         <segue destination="v8v-iJ-eKg" kind="relationship" relationship="viewControllers" id="5zb-65-iIk"/>
-                        <segue destination="gnQ-Dr-Ike" kind="relationship" relationship="viewControllers" id="th4-jP-ED3"/>
                         <segue destination="8Oq-89-fUE" kind="relationship" relationship="viewControllers" id="HPc-9R-hdU"/>
-                        <segue destination="wGr-8M-hcW" kind="relationship" relationship="viewControllers" id="SK6-ad-I4b"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OUo-ou-uOh" userLabel="First Responder" sceneMemberID="firstResponder"/>

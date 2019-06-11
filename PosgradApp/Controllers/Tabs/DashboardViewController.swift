@@ -516,7 +516,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                 
                 for document in querySnapshot!.documents {
                     if let documentData = document.data() as? [String : Any] {
-                        let newAvatar = documentData[TeamKeys.avatarKey] as? DocumentReference
+                        let newAvatar = documentData[TeamKeys.avatarKey] as? String
                         let ID = document.documentID
                         let reference = document.reference
                         let newTeam = Team.init(reference: reference, avatar: newAvatar, ID: ID)
@@ -543,7 +543,8 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                         let newTeamID = documentData[TeamMemberKeys.teamIDKey] as? DocumentReference
                         let newName = documentData[TeamMemberKeys.nameKey] as? String
                         let ID = document.documentID
-                        let newTeamMember = TeamMember.init(course: newCourse, email: newEmail, teamID: newTeamID, name: newName, ID: ID)
+                        let newAvatar = documentData[TeamMemberKeys.avatarKey] as? String
+                        let newTeamMember = TeamMember.init(course: newCourse, email: newEmail, teamID: newTeamID, name: newName, ID: ID, avatar: newAvatar)
                         self.teamMembersByID[ID] = newTeamMember
                     }
                 }

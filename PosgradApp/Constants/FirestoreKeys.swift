@@ -35,6 +35,7 @@ struct TeamMemberKeys {
     static let emailKey = "email"
     static let teamIDKey = "idtime"
     static let nameKey = "nome"
+    static let avatarKey = "avatar"
 }
 
 struct ActivityKeys {

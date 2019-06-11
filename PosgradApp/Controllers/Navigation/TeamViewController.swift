@@ -57,7 +57,11 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "teamMembersCell", for: indexPath) as! TeamMembersTableViewCell
         cell.memberLabel.text = members[indexPath.row].name
-        cell.memberImageView.image = UIImage(named: "noimage")
+        if let imageURL = members[indexPath.row].avatar {
+            cell.memberImageView.downloaded(from: imageURL)
+        } else {
+            cell.memberImageView.image = UIImage(named: "noimage")
+        }
         cell.memberImageView.layer.cornerRadius = 39
         cell.memberImageView.contentMode = .scaleAspectFit
         cell.selectionStyle = .none
@@ -79,7 +83,8 @@ class TeamViewController: UIViewController, UITableViewDelegate, UITableViewData
                         let newTeamID = documentData[TeamMemberKeys.teamIDKey] as? DocumentReference
                         let newName = documentData[TeamMemberKeys.nameKey] as? String
                         let ID = document.documentID
-                        let newTeamMember = TeamMember.init(course: newCourse, email: newEmail, teamID: newTeamID, name: newName, ID: ID)
+                        let newAvatar = documentData[TeamMemberKeys.avatarKey] as? String
+                        let newTeamMember = TeamMember.init(course: newCourse, email: newEmail, teamID: newTeamID, name: newName, ID: ID, avatar: newAvatar)
                         self.members.append(newTeamMember)
                     }
                 }
